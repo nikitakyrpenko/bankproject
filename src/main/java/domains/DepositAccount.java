@@ -2,29 +2,36 @@ package domains;
 
 import domains.abstracts.Account;
 import domains.enumeration.AccountType;
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
 public class DepositAccount extends Account {
 
-    private final BigDecimal depositRate;
+    private final BigDecimal      depositRate;
     private final List<Operation> replenishment;
-    private AccountType accountType;
+    private AccountType           accountType;
 
     private DepositAccount(Builder builder) {
         super(builder.id, builder.holder, builder.operations, builder.expirationDate, builder.depositAmount);
-        this.depositRate = builder.depositRate;
+        this.depositRate   = builder.depositRate;
         this.replenishment = builder.replenishment;
-        this.accountType = builder.accountType;
+        this.accountType   = builder.accountType;
+    }
+
+    //Process incoming transfer with operation with TYPE replenishment
+
+
+    @Override
+    public void chargingMonthlyInterestOnAccount(Operation operation) {
+        super.processTransfer(operation);
     }
 
     @Override
-    public void chargePercents() {
-        setBalance(getBalance().add(getBalance().multiply(depositRate)));
+    public BigDecimal calculateInterestPerMonth() {
+        return super.getBalance().multiply(depositRate);
     }
+
 
     public BigDecimal getDepositRate() {
         return depositRate;
@@ -74,12 +81,12 @@ public class DepositAccount extends Account {
             this.expirationDate = expirationDate;
             return this;
         }
-        public Builder withDepositRate(BigDecimal depositRate){
-            this.depositRate = depositRate;
+        public Builder withDepositRate(double depositRate){
+            this.depositRate = BigDecimal.valueOf(depositRate);
             return this;
         }
-        public Builder withDepositAmount(BigDecimal depositAmount){
-            this.depositAmount = depositAmount;
+        public Builder withDepositAmount(double depositAmount){
+            this.depositAmount = BigDecimal.valueOf(depositAmount);
             return this;
         }
         public Builder withReplenishment(List<Operation> replenishment){
@@ -94,4 +101,6 @@ public class DepositAccount extends Account {
             return new DepositAccount(this);
         }
     }
+
+
 }

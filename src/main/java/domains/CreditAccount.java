@@ -2,6 +2,7 @@ package domains;
 
 import domains.abstracts.Account;
 import domains.enumeration.AccountType;
+import domains.enumeration.OperationType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,10 +23,10 @@ public class CreditAccount extends Account {
 
     private CreditAccount(Builder builder){
         super(builder.id,builder.holder,builder.operations,builder.expirationDate,builder.limit);
-        this.limit = builder.limit;
-        this.rate = builder.rate;
+        this.limit       = builder.limit;
+        this.rate        = builder.rate;
         this.liabilities = BigDecimal.ZERO;
-        this.charge = creditChargePerMonth();
+        this.charge      = creditChargePerMonth();
     }
 
     private double percentagePerMonth() {
@@ -39,10 +40,6 @@ public class CreditAccount extends Account {
         return BigDecimal.valueOf(chargePerMonth);
     }
 
-    @Override
-    public void chargePercents() {
-        liabilities = liabilities.add(charge).setScale(2, RoundingMode.CEILING);
-    }
 
     public BigDecimal getLiabilities() {
         return liabilities;
@@ -63,6 +60,21 @@ public class CreditAccount extends Account {
     public static Builder builder(){
         return new Builder();
     }
+
+    @Override
+    public void chargingMonthlyInterestOnAccount(Operation operation) {
+        if (operation.getOperationType() == OperationType.CREDIT_ARRIVAL) {
+            liabilities = liabilities.add(operation.getTransfer()).setScale(2, RoundingMode.CEILING);
+        }
+        super.processTransfer(operation);
+    }
+
+    @Override
+    public BigDecimal calculateInterestPerMonth() {
+        return charge;
+    }
+
+
 
     public static class Builder {
         Integer id;
@@ -102,12 +114,12 @@ public class CreditAccount extends Account {
             this.accountType = accountType;
             return this;
         }
-        public Builder withLimit(BigDecimal limit){
-            this.limit = limit;
+        public Builder withLimit(double limit){
+            this.limit = BigDecimal.valueOf(limit);
             return this;
         }
-        public Builder withRate(BigDecimal rate){
-            this.rate = rate;
+        public Builder withRate(double rate){
+            this.rate = BigDecimal.valueOf(rate);
             return this;
         }
 
