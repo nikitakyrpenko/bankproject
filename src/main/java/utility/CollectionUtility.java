@@ -1,5 +1,6 @@
-package domains.utility;
+package utility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -11,5 +12,11 @@ public class CollectionUtility {
 
     public static <T> List<T> nullSafeListInitialize(List<T> items) {
         return items == null ? emptyList() : unmodifiableList(items);
+    }
+
+    public static <T> List<T> createCopyAndUpdateUnmodifiableList(List<T> items, T item){
+        List<T> copy = new ArrayList<>(items);
+        copy.add(item);
+        return unmodifiableList(copy);
     }
 }

@@ -1,11 +1,10 @@
-package domains;
+package domain;
 
-import domains.abstracts.Account;
-import domains.enumeration.Role;
+import domain.enums.Role;
 import java.util.List;
 import java.util.Objects;
 
-import static domains.utility.CollectionUtility.*;
+import static utility.CollectionUtility.*;
 
 public class User {
 
@@ -37,12 +36,12 @@ public class User {
         return name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
     public String getEmail() {
         return email;
+    }
+
+    public String getSurname() {
+        return surname;
     }
 
     public String getPassword() {
@@ -60,8 +59,6 @@ public class User {
     public List<Account> getAccounts() {
         return accounts;
     }
-
-    public void setAccounts(List<Account> accounts){this.accounts = nullSafeListInitialize(accounts);}
 
     public static Builder builder(){ return new Builder();}
 

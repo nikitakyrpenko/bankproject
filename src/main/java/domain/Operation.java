@@ -1,33 +1,39 @@
-package domains;
+package domain;
 
-import domains.abstracts.Account;
-import domains.enumeration.OperationType;
-
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
 public class Operation {
-    private Integer         id;
-    private String          purposeOfTransaction;
-    private Account         receiverOfTransaction;
-    private Account         senderOfTransaction;
-    private Date            dateOfTransaction;
-    private OperationType   operationType;
-    private BigDecimal      transfer;
+    private final Integer         id;
+    private final String          purposeOfTransaction;
+    private final Account         receiverOfTransaction;
+    private final Account         senderOfTransaction;
+    private final Date            dateOfTransaction;
+    private final Double          transfer;
 
     public Operation(Builder builder) {
         this.id                      = builder.id;
+        this.transfer                = builder.transfer;
+        this.dateOfTransaction       = builder.dateOfTransaction;
+        this.senderOfTransaction     = builder.senderOfTransaction;
         this.purposeOfTransaction    = builder.purposeOfTransaction;
         this.receiverOfTransaction   = builder.receiverOfTransaction;
-        this.senderOfTransaction     = builder.senderOfTransaction;
-        this.dateOfTransaction       = builder.dateOfTransaction;
-        this.operationType           = builder.operationType;
-        this.transfer                = builder.transfer;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public Double getTransfer() {
+        return transfer;
+    }
+
+    public Date getDateOfTransaction() {
+        return dateOfTransaction;
+    }
+
+    public Account getSenderOfTransaction() {
+        return senderOfTransaction;
     }
 
     public String getPurposeOfTransaction() {
@@ -38,25 +44,7 @@ public class Operation {
         return receiverOfTransaction;
     }
 
-    public Account getSenderOfTransaction() {
-        return senderOfTransaction;
-    }
-
-    public Date getDateOfTransaction() {
-        return dateOfTransaction;
-    }
-
-    public BigDecimal getTransfer() {
-        return transfer;
-    }
-
-    public OperationType getOperationType() {
-        return operationType;
-    }
-
     public static Builder builder(){ return new Builder(); }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -77,14 +65,12 @@ public class Operation {
     }
 
     public static class Builder{
-         Integer         id;
-         String          purposeOfTransaction;
-         Account         receiverOfTransaction;
-         Account         senderOfTransaction;
-         Date            dateOfTransaction;
-         OperationType   operationType;
-         BigDecimal      transfer;
-
+         private Integer         id;
+         private String          purposeOfTransaction;
+         private Account         receiverOfTransaction;
+         private Account         senderOfTransaction;
+         private Date            dateOfTransaction;
+         private Double          transfer;
 
          public Builder withId(Integer id){
              this.id = id;
@@ -106,12 +92,8 @@ public class Operation {
              this.dateOfTransaction = date;
              return this;
          }
-         public Builder withTransfer(BigDecimal transfer){
+         public Builder withTransfer(Double transfer){
              this.transfer = transfer;
-             return this;
-         }
-         public Builder withOperationType(OperationType operationType){
-             this.operationType = operationType;
              return this;
          }
 
