@@ -1,6 +1,8 @@
 package domain;
 
 import domain.abstraction.OperationProcessable;
+import domain.enums.AccountType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -54,15 +56,17 @@ public abstract class Account implements OperationProcessable {
         return expirationDate;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
     public List<Operation> getOperations() {
         return operations;
     }
 
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     public abstract Double getCharge();
+
+    public abstract AccountType getAccountType();
 
     @Override
     public String toString() {

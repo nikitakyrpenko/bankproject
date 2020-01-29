@@ -13,9 +13,10 @@ public class CreditAccount extends Account implements InterestChargeable {
     private static final int CREDIT_PERIOD                = 12;
     private static final int TOTAL_CREDIT_PERIOD_IN_MONTH = 36;
 
-    private final Double limit;
-    private final Double rate;
-    private final Double charge;
+    private final Double      limit;
+    private final Double      rate;
+    private final Double      charge;
+    private final AccountType type;
 
     private Double       liability;
     private List<Charge> charges;
@@ -25,6 +26,7 @@ public class CreditAccount extends Account implements InterestChargeable {
         this.limit     = builder.limit;
         this.rate      = builder.rate;
         this.liability = builder.liability;
+        this.type      = builder.accountType;
         this.charge    = calculateCreditLiabilityPerMonth();
         this.charges   = nullSafeListInitialize(builder.charges);
     }
@@ -39,9 +41,14 @@ public class CreditAccount extends Account implements InterestChargeable {
 
     @Override
     public void processCharge() {
-        Charge incomingCharge = new Charge(this.charge, ChargeType.CREDIT_ARRIVAL, this);
+        Charge incomingCharge = new Charge(charges.size() + 1, this.charge, ChargeType.CREDIT_ARRIVAL, this);
         this.liability        = this.liability + this.charge;
         this.charges          = createCopyAndUpdateUnmodifiableList(charges, incomingCharge);
+    }
+
+    @Override
+    public AccountType getAccountType() {
+        return type;
     }
 
     @Override

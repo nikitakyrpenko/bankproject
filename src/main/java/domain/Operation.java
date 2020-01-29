@@ -64,6 +64,18 @@ public class Operation {
         return Objects.hash(id, purposeOfTransaction, receiverOfTransaction, senderOfTransaction, dateOfTransaction, transfer);
     }
 
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "id=" + id +
+                ", purposeOfTransaction='" + purposeOfTransaction + '\'' +
+                ", receiverOfTransaction=" + receiverOfTransaction +
+                ", senderOfTransaction=" + senderOfTransaction +
+                ", dateOfTransaction=" + dateOfTransaction +
+                ", transfer=" + transfer +
+                '}';
+    }
+
     public static class Builder{
          private Integer         id;
          private String          purposeOfTransaction;

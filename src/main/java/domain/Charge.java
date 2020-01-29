@@ -5,19 +5,16 @@ import java.util.Objects;
 
 public class Charge {
 
-    private Integer          id;
+    private final Integer    id;
     private final Double     charge;
     private final ChargeType chargeType;
     private final Account    account;
 
-    public Charge(Double charge, ChargeType chargeType, Account account){
+    public Charge(Integer id, Double charge, ChargeType chargeType, Account account){
+        this.id = id;
         this.charge = charge;
         this.account = account;
         this.chargeType = chargeType;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getId() {

@@ -22,13 +22,31 @@ public class DepositAccount extends Account implements InterestChargeable {
         this.accountType   = builder.accountType;
         this.charges       = nullSafeListInitialize(builder.charges);
     }
+
+    public Double getDepositRate() {
+        return depositRate;
+    }
+
+    public Double getDepositAmount() {
+        return depositAmount;
+    }
+
+    public List<Charge> getCharges() {
+        return charges;
+    }
+
     @Override
     public void processCharge() {
         Double deposit         = super.getBalance();
         Double value           = deposit * depositRate;
         super.setBalance(deposit + value);
-        Charge incomingCharge  = new Charge(value, ChargeType.DEPOSIT_ARRIVAL, this);
+        Charge incomingCharge  = new Charge(charges.size() + 1, value, ChargeType.DEPOSIT_ARRIVAL, this);
         this.charges           = createCopyAndUpdateUnmodifiableList(charges, incomingCharge);
+    }
+
+    @Override
+    public AccountType getAccountType() {
+        return accountType;
     }
 
     @Override
