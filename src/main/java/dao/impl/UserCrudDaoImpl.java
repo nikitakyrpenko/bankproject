@@ -4,14 +4,14 @@ import dao.*;
 import dao.util.ConnectorDB;
 import domain.User;
 import domain.enums.Role;
-
-
+import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao {
+    private static org.apache.log4j.Logger log = Logger.getLogger(UserCrudDaoImpl.class);
 
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email=?";
@@ -67,7 +67,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
 
             statement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -83,7 +83,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
 
             statement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 

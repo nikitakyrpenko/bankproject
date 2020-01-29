@@ -7,6 +7,7 @@ import domain.CreditAccount;
 import domain.DepositAccount;
 import domain.User;
 import domain.enums.AccountType;
+import org.apache.log4j.Logger;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements AccountDao {
+
+    private static org.apache.log4j.Logger log = Logger.getLogger(AccountCrudDaoImpl.class);
 
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM accounts WHERE id=?";
     private static final String FIND_ALL_ACCOUNTS_QUERY = "SELECT * FROM accounts";
@@ -77,7 +80,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(5, 1);
                 statement.executeUpdate();
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         } else {
             try (final PreparedStatement statement = connector.getConnection().prepareStatement(INSERT_CREDIT_ACCOUNT_QUERY)) {
@@ -92,7 +95,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(8, 2);
                 statement.executeUpdate();
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }
@@ -108,7 +111,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(4, entity.getHolder().getId());
                 statement.executeUpdate();
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         } else {
             CreditAccount creditAccount = (CreditAccount) entity;
@@ -122,7 +125,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(7, creditAccount.getId());
                 statement.executeUpdate();
             } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error(e);
             }
         }
     }

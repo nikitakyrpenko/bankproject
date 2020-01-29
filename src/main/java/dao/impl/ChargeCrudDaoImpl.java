@@ -6,6 +6,7 @@ import dao.util.ConnectorDB;
 import domain.Account;
 import domain.Charge;
 import domain.enums.ChargeType;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements ChargeDao {
+    private static org.apache.log4j.Logger log = Logger.getLogger(ChargeCrudDaoImpl.class);
 
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM charges WHERE id=?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM charges";
@@ -54,7 +56,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
             statement.setInt(3, entity.getId());
             statement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -67,7 +69,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
             statement.setInt(3, entity.getAccount().getId());
             statement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 }

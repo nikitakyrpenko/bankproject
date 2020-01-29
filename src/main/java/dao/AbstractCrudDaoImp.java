@@ -5,6 +5,7 @@ import dao.util.consumer.BiConsumer;
 import dao.util.ConnectorDB;
 import dao.util.Page;
 import dao.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableDao<E> {
+    private static org.apache.log4j.Logger log = Logger.getLogger(AbstractCrudDaoImp.class);
     protected final ConnectorDB connector;
     private final String findByIdQuery;
     private final String findAllQuery;
@@ -54,7 +56,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            //log
+            log.error(e);
             throw new DataBaseSqlRuntimeException("", e);
         }
 
@@ -74,7 +76,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            //log
+            log.error(e);
             throw new DataBaseSqlRuntimeException("", e);
         }
 
@@ -91,7 +93,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 result.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            //log
+            log.error(e);
             e.printStackTrace();
         }
         return result;
@@ -114,8 +116,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 result.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            //log
-            e.printStackTrace();
+            log.error(e);
         }
         return new Pageable<E>(result, page.getPageNumber(), page.getItemsPerPage(), 10);
     }
@@ -133,7 +134,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             preparedStatement.execute();
 
         } catch (SQLException | ClassNotFoundException e) {
-            //log
+            log.error(e);
             throw new DataBaseSqlRuntimeException("", e);
         }
     }
