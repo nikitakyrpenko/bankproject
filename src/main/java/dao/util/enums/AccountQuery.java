@@ -1,0 +1,12 @@
+package dao.util.enums;
+
+public enum AccountQuery {
+    FIND_ALL,
+    FIND_BY_ID,
+    FIND_ALL_PAGEABLE,
+    FIND_ALL_BY_USER_ID,
+    INSERT_DEPOSIT_ACCOUNT,
+    INSERT_CREDIT_ACCOUNT,
+    UPDATE_DEPOSIT_ACCOUNT,
+    UPDATE_CREDIT_ACCOUNT
+}

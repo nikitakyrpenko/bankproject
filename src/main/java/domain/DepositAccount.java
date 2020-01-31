@@ -6,21 +6,17 @@ import domain.enums.ChargeType;
 import java.util.List;
 import java.util.Objects;
 
-import static utility.CollectionUtility.*;
-
 public class DepositAccount extends Account implements InterestChargeable {
 
     private final Double          depositRate;
     private final Double          depositAmount;
     private final AccountType     accountType;
-    private List<Charge>          charges;
 
     private DepositAccount(DepositAccountBuilder builder) {
         super(builder);
         this.depositRate   = builder.depositRate;
         this.depositAmount = builder.depositAmount;
         this.accountType   = builder.accountType;
-        this.charges       = nullSafeListInitialize(builder.charges);
     }
 
     public Double getDepositRate() {
@@ -31,17 +27,17 @@ public class DepositAccount extends Account implements InterestChargeable {
         return depositAmount;
     }
 
-    public List<Charge> getCharges() {
-        return charges;
-    }
+
 
     @Override
-    public void processCharge() {
+    public Charge processCharge() {
+        //TODO how to set charge ID?
         Double deposit         = super.getBalance();
         Double value           = deposit * depositRate;
         super.setBalance(deposit + value);
-        Charge incomingCharge  = new Charge(charges.size() + 1, value, ChargeType.DEPOSIT_ARRIVAL, this);
-        this.charges           = createCopyAndUpdateUnmodifiableList(charges, incomingCharge);
+        Charge incomingCharge  = new Charge(1, value, ChargeType.DEPOSIT_ARRIVAL);
+        incomingCharge.setAccount(this);
+       return incomingCharge;
     }
 
     @Override
@@ -60,7 +56,6 @@ public class DepositAccount extends Account implements InterestChargeable {
                 "depositRate=" + depositRate +
                 ", depositAmount=" + depositAmount +
                 ", accountType=" + accountType +
-                ", charges=" + charges +
                 "} " + super.toString();
     }
 
@@ -71,20 +66,18 @@ public class DepositAccount extends Account implements InterestChargeable {
         DepositAccount that = (DepositAccount) o;
         return Objects.equals(depositRate, that.depositRate) &&
                 Objects.equals(depositAmount, that.depositAmount) &&
-                accountType == that.accountType &&
-                Objects.equals(charges, that.charges);
+                accountType == that.accountType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(depositRate, depositAmount, accountType, charges);
+        return Objects.hash(depositRate, depositAmount, accountType);
     }
 
     public static class DepositAccountBuilder extends AccountBuilder<DepositAccountBuilder>{
 
         private Double depositRate;
         private Double depositAmount;
-        private List<Charge> charges;
         private AccountType accountType;
 
         public DepositAccountBuilder withDepositRate(double depositRate){
@@ -97,10 +90,7 @@ public class DepositAccount extends Account implements InterestChargeable {
             this.depositAmount = depositAmount;
             return this;
         }
-        public DepositAccountBuilder withDepositCharges(List<Charge> charges){
-            this.charges = charges;
-            return this;
-        }
+
         public DepositAccountBuilder withAccountType(AccountType accountType){
             this.accountType = accountType;
             return this;

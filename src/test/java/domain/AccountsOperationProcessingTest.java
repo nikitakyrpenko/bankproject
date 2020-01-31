@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -74,7 +75,6 @@ public class AccountsOperationProcessingTest {
 
         sender.processTransfer(operation);
         receiver.processTransfer(operation);
-
     }
 
     @Test

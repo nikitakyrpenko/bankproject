@@ -1,6 +1,8 @@
 package domain.abstraction;
 
+import domain.Charge;
+
 public interface InterestChargeable {
 
-    void processCharge();
+    Charge processCharge();
 }

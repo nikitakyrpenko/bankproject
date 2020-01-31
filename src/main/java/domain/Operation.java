@@ -6,8 +6,8 @@ import java.util.Objects;
 public class Operation {
     private final Integer         id;
     private final String          purposeOfTransaction;
-    private final Account         receiverOfTransaction;
-    private final Account         senderOfTransaction;
+    private  Account         receiverOfTransaction;
+    private  Account         senderOfTransaction;
     private final Date            dateOfTransaction;
     private final Double          transfer;
 
@@ -42,6 +42,14 @@ public class Operation {
 
     public Account getReceiverOfTransaction() {
         return receiverOfTransaction;
+    }
+
+    public void setReceiverOfTransaction(Account receiverOfTransaction) {
+        this.receiverOfTransaction = receiverOfTransaction;
+    }
+
+    public void setSenderOfTransaction(Account senderOfTransaction) {
+        this.senderOfTransaction = senderOfTransaction;
     }
 
     public static Builder builder(){ return new Builder(); }

@@ -3,10 +3,7 @@ package domain;
 import domain.abstraction.InterestChargeable;
 import domain.enums.AccountType;
 import domain.enums.ChargeType;
-import java.util.List;
 import java.util.Objects;
-
-import static utility.CollectionUtility.*;
 
 public class CreditAccount extends Account implements InterestChargeable {
 
@@ -19,7 +16,6 @@ public class CreditAccount extends Account implements InterestChargeable {
     private final AccountType type;
 
     private Double       liability;
-    private List<Charge> charges;
 
     private CreditAccount(CreditAccountBuilder builder) {
         super(builder);
@@ -28,7 +24,7 @@ public class CreditAccount extends Account implements InterestChargeable {
         this.liability = builder.liability;
         this.type      = builder.accountType;
         this.charge    = calculateCreditLiabilityPerMonth();
-        this.charges   = nullSafeListInitialize(builder.charges);
+
     }
 
     private Double percents() {
@@ -40,10 +36,12 @@ public class CreditAccount extends Account implements InterestChargeable {
     }
 
     @Override
-    public void processCharge() {
-        Charge incomingCharge = new Charge(charges.size() + 1, this.charge, ChargeType.CREDIT_ARRIVAL, this);
+    public Charge processCharge() {
+        //TODO how to set charge id ?
+        Charge incomingCharge = new Charge(1, this.charge, ChargeType.CREDIT_ARRIVAL);
+        incomingCharge.setAccount(this);
         this.liability        = this.liability + this.charge;
-        this.charges          = createCopyAndUpdateUnmodifiableList(charges, incomingCharge);
+        return incomingCharge;
     }
 
     @Override
@@ -68,10 +66,6 @@ public class CreditAccount extends Account implements InterestChargeable {
         return liability;
     }
 
-    public List<Charge> getCharges() {
-        return charges;
-    }
-
     @Override
     public String toString() {
         return "CreditAccount{" +
@@ -79,7 +73,6 @@ public class CreditAccount extends Account implements InterestChargeable {
                 ", rate=" + rate +
                 ", charge=" + charge +
                 ", liability=" + liability +
-                ", charges=" + charges +
                 "} " + super.toString();
     }
 
@@ -91,20 +84,18 @@ public class CreditAccount extends Account implements InterestChargeable {
         return Objects.equals(limit, that.limit) &&
                 Objects.equals(rate, that.rate) &&
                 Objects.equals(charge, that.charge) &&
-                Objects.equals(liability, that.liability) &&
-                Objects.equals(charges, that.charges);
+                Objects.equals(liability, that.liability);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(limit, rate, charge, liability, charges);
+        return Objects.hash(limit, rate, charge, liability);
     }
 
     public static class CreditAccountBuilder extends AccountBuilder<CreditAccountBuilder> {
         private Double rate;
         private Double limit;
         private Double liability;
-        private List<Charge> charges;
         private AccountType accountType;
 
         public CreditAccountBuilder() {
@@ -128,10 +119,7 @@ public class CreditAccount extends Account implements InterestChargeable {
             this.accountType = accountType;
             return self();
         }
-        public CreditAccountBuilder withCreditCharges(List<Charge> charges){
-            this.charges = charges;
-            return self();
-        }
+
         @Override
         public CreditAccount build() {
             return new CreditAccount(this);

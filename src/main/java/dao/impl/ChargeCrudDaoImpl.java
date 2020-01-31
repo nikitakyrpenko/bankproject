@@ -2,49 +2,61 @@ package dao.impl;
 
 import dao.AbstractCrudDaoImp;
 import dao.ChargeDao;
+import dao.exception.DataBaseSqlRuntimeException;
 import dao.util.ConnectorDB;
+import dao.util.FetcherManager;
+import dao.util.QueryManager;
+import dao.util.enums.ChargeQuery;
 import domain.Account;
 import domain.Charge;
-import domain.enums.ChargeType;
 import org.apache.log4j.Logger;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements ChargeDao {
     private static org.apache.log4j.Logger log = Logger.getLogger(ChargeCrudDaoImpl.class);
 
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM charges WHERE id=?";
-    private static final String FIND_ALL_QUERY = "SELECT * FROM charges";
-    private static final String FIND_ALL_PAGEABLE = "SELECT * FROM charges LIMIT ?, ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE FROM charges WHERE id=?";
-    private static final String INSERT_QUERY = "INSERT INTO charges (`charge`,`fk_charge_types_charge`,`fk_account_charge`,) VALUES (?,?,?)";
-    private static final String UPDATE_QUERY = "UPDATE charges SET charge = ?, fk_charge_types_charge = ? WHERE id = ?";
-    private static final String FIND_ALL_CHARGES_BY_ACCOUNT_ID = "select * from charges where fk_account_charge = ?;";
+    private FetcherManager fetcherManager = FetcherManager.getInstance();
+    private static Map<Enum, String> chargeToQuery = QueryManager.getInstance().getQueryMap(Charge.class).get();
 
-    private final AccountCrudDaoImpl accountCrudDao;
+    private static final String FIND_BY_ID_QUERY;
+    private static final String FIND_ALL_QUERY;
+    private static final String FIND_ALL_PAGEABLE;
+    private static final String INSERT_QUERY;
+    private static final String UPDATE_QUERY;
+    private static final String FIND_ALL_CHARGES_BY_ACCOUNT_ID;
 
-    public ChargeCrudDaoImpl(ConnectorDB connector) {
-        super(connector, FIND_BY_ID_QUERY, FIND_ALL_QUERY, FIND_ALL_PAGEABLE, DELETE_BY_ID_QUERY);
-        accountCrudDao = new AccountCrudDaoImpl(connector);
+    static {
+        FIND_BY_ID_QUERY  = chargeToQuery.get(ChargeQuery.FIND_BY_ID);
+        FIND_ALL_QUERY    = chargeToQuery.get(ChargeQuery.FIND_ALL);
+        FIND_ALL_PAGEABLE = chargeToQuery.get(ChargeQuery.FIND_ALL_PAGEABLE);
+        INSERT_QUERY      = chargeToQuery.get(ChargeQuery.INSERT_CHARGE);
+        UPDATE_QUERY      = chargeToQuery.get(ChargeQuery.UPDATE_CHARGE);
+        FIND_ALL_CHARGES_BY_ACCOUNT_ID = chargeToQuery.get(ChargeQuery.FIND_ALL_BY_ACCOUNT);
     }
 
+    public ChargeCrudDaoImpl(ConnectorDB connector) {
+        super(connector, FIND_BY_ID_QUERY, FIND_ALL_QUERY, FIND_ALL_PAGEABLE);
+    }
 
     @Override
-    protected Charge mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        Integer id = resultSet.getInt("id");
-        Double charge = resultSet.getDouble("charge");
-        Optional<Account> account = accountCrudDao.findById(resultSet.getInt("fk_account_charge"));
-        ChargeType chargeType = resultSet.getInt("fk_charge_types_charge") == 1 ? ChargeType.DEPOSIT_ARRIVAL : ChargeType.CREDIT_ARRIVAL;
-        return new Charge(id, charge, chargeType, account.get());
+    protected Charge mapResultSetToEntity(ResultSet resultSet){
+
+        Account account = fetcherManager.fetchAccount(resultSet, getAccountColumnLabels())
+                .orElseThrow(DataBaseSqlRuntimeException::new);
+
+        Charge charge = fetcherManager.fetchCharge(resultSet, getChargeColumnLabels())
+                .orElseThrow(DataBaseSqlRuntimeException::new);
+
+        charge.setAccount(account);
+        return charge;
     }
 
     @Override
     public List<Charge> findAllChargesByAccountId(Integer id) {
-
         return findAllByParams(id, FIND_ALL_CHARGES_BY_ACCOUNT_ID, INT_PARAM_SETTER);
     }
 
@@ -60,7 +72,6 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
         }
     }
 
-
     @Override
     public void update(Charge entity) {
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(UPDATE_QUERY)) {
@@ -71,5 +82,26 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
         } catch (SQLException | ClassNotFoundException e) {
             log.error(e);
         }
+    }
+
+    private String[] getAccountColumnLabels() {
+        return new String[]{
+                "fk_accounts_type_accounts",
+                "accounts.id",
+                "expiration_date",
+                "balance",
+                "deposit_account_rate",
+                "credit_limit",
+                "charge_per_month",
+                "credit_liabilities",
+        };
+    }
+
+    private String[] getChargeColumnLabels() {
+        return new String[]{
+                "charges.id",
+                "charge",
+                "fk_charge_types_charge",
+        };
     }
 }

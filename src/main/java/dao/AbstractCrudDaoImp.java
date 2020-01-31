@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableDao<E> {
-    private static org.apache.log4j.Logger log = Logger.getLogger(AbstractCrudDaoImp.class);
+    private static Logger log = Logger.getLogger(AbstractCrudDaoImp.class);
+
     protected final ConnectorDB connector;
     private final String findByIdQuery;
     private final String findAllQuery;
     private final String findAllPageableQuery;
-    private final String deleteByIdQuery;
 
     protected final BiConsumer<PreparedStatement, Integer> INT_PARAM_SETTER =
             ((statement, integer) -> statement.setObject(1, integer));
@@ -36,12 +36,11 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             });
 
 
-    protected AbstractCrudDaoImp(ConnectorDB connector, String findByIdQuery, String findAllQuery, String findAllPageableQuery, String deleteByIdQuery) {
+    protected AbstractCrudDaoImp(ConnectorDB connector, String findByIdQuery, String findAllQuery, String findAllPageableQuery) {
         this.connector = connector;
         this.findByIdQuery = findByIdQuery;
         this.findAllQuery = findAllQuery;
         this.findAllPageableQuery = findAllPageableQuery;
-        this.deleteByIdQuery = deleteByIdQuery;
     }
 
     protected <P> Optional<E> findByParam(P param, String findByParam, BiConsumer<PreparedStatement, P> designatedParamSetter) {
@@ -118,7 +117,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
         } catch (SQLException | ClassNotFoundException e) {
             log.error(e);
         }
-        return new Pageable<E>(result, page.getPageNumber(), page.getItemsPerPage(), 10);
+        return new Pageable<>(result, page.getPageNumber(), page.getItemsPerPage(), 10);
     }
 
     @Override
@@ -128,15 +127,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
 
     @Override
     public void deleteById(Integer id) {
-        try (final PreparedStatement preparedStatement =
-                     connector.getConnection().prepareStatement(deleteByIdQuery)) {
-            preparedStatement.setInt(1, id);
-            preparedStatement.execute();
-
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
-            throw new DataBaseSqlRuntimeException("", e);
-        }
+        throw new UnsupportedOperationException("Unsupported exception");
     }
 
     protected abstract E mapResultSetToEntity(ResultSet resultSet) throws SQLException;

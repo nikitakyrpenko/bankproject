@@ -11,7 +11,7 @@ import static utility.CollectionUtility.*;
 public abstract class Account implements OperationProcessable {
 
     private final Integer id;
-    private final User    holder;
+    private User    holder;
     private final Date    expirationDate;
 
     private List<Operation> operations;
@@ -67,6 +67,10 @@ public abstract class Account implements OperationProcessable {
     public abstract Double getCharge();
 
     public abstract AccountType getAccountType();
+
+    public void setHolder(User holder) {
+        this.holder = holder;
+    }
 
     @Override
     public String toString() {

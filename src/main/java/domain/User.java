@@ -1,10 +1,7 @@
 package domain;
 
 import domain.enums.Role;
-import java.util.List;
 import java.util.Objects;
-
-import static utility.CollectionUtility.*;
 
 public class User {
 
@@ -15,7 +12,7 @@ public class User {
     private final String password;
     private final String telephone;
     private final Role role;
-    private  List<Account> accounts;
+
 
     private User(Builder builder){
         this.id = builder.id;
@@ -25,7 +22,7 @@ public class User {
         this.password = builder.password;
         this.telephone = builder.telephone;
         this.role = builder.role;
-        this.accounts = nullSafeListInitialize(builder.accounts);
+
     }
 
     public Integer getId() {
@@ -56,9 +53,7 @@ public class User {
         return role;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
+
 
     public static Builder builder(){ return new Builder();}
 
@@ -73,8 +68,8 @@ public class User {
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(telephone, user.telephone) &&
-                role == user.role &&
-                Objects.equals(accounts, user.accounts);
+                role == user.role ;
+
     }
 
     @Override
@@ -84,14 +79,15 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", role=" + role +
-                '}';
+                '}'+"\n";
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, email, password, telephone, role, accounts);
+        return Objects.hash(id, name, surname, email, password, telephone, role);
     }
 
     public static class Builder{
@@ -102,7 +98,6 @@ public class User {
         private String password;
         private String telephone;
         private Role role;
-        private List<Account> accounts;
 
         public Builder withId(Integer id){
             this.id = id;
@@ -132,10 +127,7 @@ public class User {
             this.role = role;
             return this;
         }
-        public Builder withAccounts(List<Account> accounts){
-            this.accounts = accounts;
-            return this;
-        }
+
         public User build(){
             return new User(this);
         }

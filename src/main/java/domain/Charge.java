@@ -8,12 +8,11 @@ public class Charge {
     private final Integer    id;
     private final Double     charge;
     private final ChargeType chargeType;
-    private final Account    account;
+    private Account    account;
 
-    public Charge(Integer id, Double charge, ChargeType chargeType, Account account){
+    public Charge(Integer id, Double charge, ChargeType chargeType){
         this.id = id;
         this.charge = charge;
-        this.account = account;
         this.chargeType = chargeType;
     }
 
@@ -31,6 +30,11 @@ public class Charge {
 
     public ChargeType getChargeType() {
         return chargeType;
+    }
+
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     @Override
