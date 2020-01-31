@@ -17,10 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements ChargeDao {
-    private static org.apache.log4j.Logger log = Logger.getLogger(ChargeCrudDaoImpl.class);
+    private static Logger LOGGER = Logger.getLogger(ChargeCrudDaoImpl.class);
 
     private FetcherManager fetcherManager = FetcherManager.getInstance();
-    private static Map<Enum, String> chargeToQuery = QueryManager.getInstance().getQueryMap(Charge.class).get();
+    private static Map<Enum, String> chargeToQuery = QueryManager
+            .getInstance()
+            .getQueryMap(Charge.class)
+            .get();
 
     private static final String FIND_BY_ID_QUERY;
     private static final String FIND_ALL_QUERY;
@@ -67,8 +70,8 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
             statement.setInt(2, entity.getChargeType().ordinal());
             statement.setInt(3, entity.getId());
             statement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -79,8 +82,8 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
             statement.setInt(2, entity.getChargeType().ordinal());
             statement.setInt(3, entity.getAccount().getId());
             statement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 

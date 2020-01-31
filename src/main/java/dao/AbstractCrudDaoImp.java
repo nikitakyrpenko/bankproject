@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableDao<E> {
-    private static Logger log = Logger.getLogger(AbstractCrudDaoImp.class);
+    private static Logger LOGGER = Logger.getLogger(AbstractCrudDaoImp.class);
 
     protected final ConnectorDB connector;
     private final String findByIdQuery;
@@ -54,8 +54,8 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 }
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
         }
 
@@ -74,8 +74,8 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 }
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
         }
 
@@ -91,9 +91,9 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             while (resultSet.next()) {
                 result.add(mapResultSetToEntity(resultSet));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
-            e.printStackTrace();
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+            throw new DataBaseSqlRuntimeException("", e);
         }
         return result;
     }
@@ -114,8 +114,8 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             while (resultSet.next()) {
                 result.add(mapResultSetToEntity(resultSet));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
         return new Pageable<>(result, page.getPageNumber(), page.getItemsPerPage(), 10);
     }

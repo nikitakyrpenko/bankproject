@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao {
-    private static org.apache.log4j.Logger log = Logger.getLogger(UserCrudDaoImpl.class);
+    private static Logger LOGGER = Logger.getLogger(UserCrudDaoImpl.class);
 
     private FetcherManager fetcherManager = FetcherManager.getInstance();
     private static Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(User.class).get();
@@ -70,8 +70,8 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
             statement.setInt(6, entity.getRole() == Role.CLIENT ? 1 : 2);
 
             statement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -86,8 +86,8 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
             statement.setInt(6, entity.getId());
 
             statement.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            log.error(e);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 

@@ -18,11 +18,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements AccountDao {
 
-    private static Logger log = Logger.getLogger(AccountCrudDaoImpl.class);
+    private static Logger LOGGER = Logger.getLogger(AccountCrudDaoImpl.class);
 
     private static Map<Enum, String> ACCOUNT_TO_QUERY = QueryManager.getInstance().getQueryMap(Account.class).get();
     private static final FetcherManager fetcherManager = FetcherManager.getInstance();
@@ -79,8 +78,8 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(4, depositAccount.getHolder().getId());
                 statement.setInt(5, AccountType.DEPOSIT.ordinal());
                 statement.executeUpdate();
-            } catch (SQLException | ClassNotFoundException e) {
-                log.error(e);
+            } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
             }
         } else {
             try (final PreparedStatement statement = connector.getConnection().prepareStatement(INSERT_CREDIT_ACCOUNT_QUERY)) {
@@ -94,8 +93,8 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setInt(7, creditAccount.getHolder().getId());
                 statement.setInt(8, AccountType.CREDIT.ordinal());
                 statement.executeUpdate();
-            } catch (SQLException | ClassNotFoundException e) {
-                log.error(e);
+            } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -110,8 +109,8 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setDouble(3, depositAccount.getDepositRate());
                 statement.setInt(4, entity.getHolder().getId());
                 statement.executeUpdate();
-            } catch (SQLException | ClassNotFoundException e) {
-                log.error(e);
+            } catch (SQLException  e) {
+                LOGGER.error(e.getMessage());
             }
         } else {
             CreditAccount creditAccount = (CreditAccount) entity;
@@ -124,8 +123,8 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 statement.setDouble(6, creditAccount.getLiability());
                 statement.setInt(7, creditAccount.getId());
                 statement.executeUpdate();
-            } catch (SQLException | ClassNotFoundException e) {
-                log.error(e);
+            } catch (SQLException e) {
+                LOGGER.error(e.getMessage());
             }
         }
     }
