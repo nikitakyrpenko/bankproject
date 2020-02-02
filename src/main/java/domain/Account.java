@@ -6,25 +6,19 @@ import domain.enums.AccountType;
 import java.util.Date;
 import java.util.List;
 
-import static utility.CollectionUtility.*;
-
 public abstract class Account implements OperationProcessable {
 
     private final Integer id;
-    private User    holder;
     private final Date    expirationDate;
-
-    private List<Operation> operations;
+    private User    holder;
     private Double          balance;
 
     public Account(AccountBuilder builder) {
         this.id             = builder.id;
         this.holder         = builder.holder;
         this.balance        = builder.balance;
-        this.operations     = nullSafeListInitialize(builder.operations);
         this.expirationDate = builder.expirationDate;
     }
-
 
     @Override
     public void processTransfer(Operation operation) {
@@ -37,7 +31,6 @@ public abstract class Account implements OperationProcessable {
         if (this.equals(receiver)){
             this.balance = this.balance + transfer;
         }
-        this.operations = createCopyAndUpdateUnmodifiableList(operations, operation);
     }
 
     public Integer getId() {
@@ -54,10 +47,6 @@ public abstract class Account implements OperationProcessable {
 
     public Date getExpirationDate() {
         return expirationDate;
-    }
-
-    public List<Operation> getOperations() {
-        return operations;
     }
 
     public void setBalance(Double balance) {
@@ -78,7 +67,6 @@ public abstract class Account implements OperationProcessable {
                 "id=" + id +
                 ", holder=" + holder +
                 ", expirationDate=" + expirationDate +
-                ", operations=" + operations +
                 ", balance=" + balance +
                 '}';
     }

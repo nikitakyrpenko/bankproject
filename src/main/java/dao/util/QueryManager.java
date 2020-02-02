@@ -71,9 +71,9 @@ public class QueryManager {
     private static final String OPERATION_FIND_BY_ACCOUNT = OPERATION_FIND_ALL + "WHERE fk_accounts_receiver = ? OR fk_accounts_sender = ?; ";
 
     private static final String USER_FIND_ALL = "SELECT * FROM users";
-    private static final String USER_FIND_BY_ID = USER_FIND_ALL + "WHERE users.id = ?";
-    private static final String USER_FIND_ALL_PAGEABLE = USER_FIND_ALL + "LIMIT ?, ?";
-    private static final String USER_FIND_BY_EMAIL = USER_FIND_ALL + "WHERE email=?";
+    private static final String USER_FIND_BY_ID = "SELECT * FROM users WHERE users.id = ?";
+    private static final String USER_FIND_ALL_PAGEABLE = "SELECT * FROM users LIMIT ?, ?";
+    private static final String USER_FIND_BY_EMAIL = "SELECT * FROM users WHERE users.email=?";
     private static final String USER_FIND_BY_ACCOUNT = "select * from users WHERE users.id IN (SELECT accounts.fk_users_accounts FROM accounts WHERE accounts.id = ?)";
     private static final String USER_INSERT = "INSERT INTO users (`firstname`,`surname`,`email`,`passwords`,`telephone`,`fk_roles_users`) VALUES (?,?,?,?,?,?)";
     private static final String USER_UPDATE = "UPDATE users SET firstname = ?, surname = ?, email = ?, passwords = ?,telephone= ? WHERE id = ?";
@@ -87,12 +87,27 @@ public class QueryManager {
     private static final String ACCOUNT_UPDATE_CREDIT_ACCOUNT = "UPDATE accounts SET expiration_date = ?, balance = ?, credit_limit = ?, credit_rate = ?, charge_per_month = ?, credit_liabilities= ? WHERE id = ?";
     private static final String ACCOUNT_FIND_BY_USER_ID = "select * from accounts INNER JOIN users ON accounts.fk_users_accounts = users.id WHERE users.id = ?";
 
-    private static final String CHARGE_FIND_ALL = "select * from charges INNER JOIN accounts ON accounts.id = charges.fk_charge_types_charge";
-    private static final String CHARGE_FIND_BY_ID = "select * from charges INNER JOIN accounts ON accounts.id = charges.fk_charge_types_charge where charges.id = ?";
-    private static final String CHARGE_FIND_ALL_PAGEABLE = "select * from charges INNER JOIN accounts ON accounts.id = charges.fk_charge_types_charge LIMIT ?, ?";
+    private static final String CHARGE_FIND_ALL = "SELECT * " +
+            "FROM" +
+            "    charges" +
+            "        INNER JOIN" +
+            "    accounts ON charges.fk_account_charge = accounts.id" +
+            "        INNER JOIN" +
+            "    users ON fk_users_accounts = users.id ";
+
+    private static final String CHARGE_FIND_ALL_BY_ACCOUNT = CHARGE_FIND_ALL +
+            "WHERE" +
+            "    accounts.id = ?";
+
+    private static final String CHARGE_FIND_BY_ID = CHARGE_FIND_ALL +
+            "WHERE" +
+            "   charges.id = ?";
+
+    private static final String CHARGE_FIND_ALL_PAGEABLE = CHARGE_FIND_ALL +
+            " LIMIT ?, ?";
+
     private static final String CHARGE_INSERT = "INSERT INTO charges (`charge`,`fk_charge_types_charge`,`fk_account_charge`,) VALUES (?,?,?)";
     private static final String CHARGE_UPDATE = "UPDATE charges SET charge = ?, fk_charge_types_charge = ? WHERE id = ?";
-    private static final String CHARGE_FIND_ALL_BY_ACCOUNT = "select * from charges INNER JOIN accounts ON accounts.id = charges.fk_charge_types_charge WHERE accounts.id = ?";
 
     private QueryManager() {
     }

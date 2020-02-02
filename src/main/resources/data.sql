@@ -15,8 +15,14 @@ VALUE
 ("DEPOSIT"),
 ("CREDIT");
 
+
+INSERT INTO `roles` (`role_description`)
+VALUES
+("USER"),
+("ADMIN");
+
 INSERT INTO `users` (`firstname`,`surname`,`email`,`passwords`,`telephone`,`fk_roles_users`)
-VALUES 
+VALUES
 ("Freya","Rodriguez","dolor.Donec@etmagnaPraesent.net","1","715-0987","1"),
 ("Fleur","Morgan","Vivamus.rhoncus.Donec@lacusEtiam.net","1","612-4806","1"),
 ("Kim","Butler","ante.iaculis@Donecnibhenim.ca","451-2416","1","1"),

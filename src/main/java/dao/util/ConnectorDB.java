@@ -1,10 +1,10 @@
 package dao.util;
 
+import com.mysql.jdbc.log.Log;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -16,6 +16,7 @@ public class ConnectorDB {
 
         ResourceBundle resource = ResourceBundle.getBundle(filename);
         config = new HikariConfig();
+        config.setDriverClassName(resource.getString("db.driver"));
         config.setJdbcUrl(resource.getString("db.url"));
         config.setUsername(resource.getString("db.user"));
         config.setPassword(resource.getString("db.password"));
@@ -23,8 +24,14 @@ public class ConnectorDB {
         source =  new HikariDataSource(config);;
     }
 
-    public Connection getConnection() throws SQLException{
-        return source.getConnection();
+    public Connection getConnection(){
+        Connection connection = null;
+        try {
+            connection = source.getConnection();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return connection;
     }
 
 }

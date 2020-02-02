@@ -56,7 +56,7 @@ public class DepositAccount extends Account implements InterestChargeable {
                 "depositRate=" + depositRate +
                 ", depositAmount=" + depositAmount +
                 ", accountType=" + accountType +
-                "} " + super.toString();
+                "} " + super.toString() + "\n";
     }
 
     @Override

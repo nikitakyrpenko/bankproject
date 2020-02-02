@@ -9,6 +9,7 @@ import dao.util.QueryManager;
 import dao.util.enums.ChargeQuery;
 import domain.Account;
 import domain.Charge;
+import domain.User;
 import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -48,12 +49,16 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
     @Override
     protected Charge mapResultSetToEntity(ResultSet resultSet){
 
+        User user = fetcherManager.fetchUser(resultSet, getUserColumnLabels())
+                .orElseThrow(DataBaseSqlRuntimeException::new);
+
         Account account = fetcherManager.fetchAccount(resultSet, getAccountColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
 
         Charge charge = fetcherManager.fetchCharge(resultSet, getChargeColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
 
+        account.setHolder(user);
         charge.setAccount(account);
         return charge;
     }
@@ -95,6 +100,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
                 "balance",
                 "deposit_account_rate",
                 "credit_limit",
+                "credit_rate",
                 "charge_per_month",
                 "credit_liabilities",
         };
@@ -105,6 +111,17 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
                 "charges.id",
                 "charge",
                 "fk_charge_types_charge",
+        };
+    }
+    private String[] getUserColumnLabels() {
+        return new String[]{
+                "fk_roles_users",
+                "id",
+                "email",
+                "firstname",
+                "surname",
+                "passwords",
+                "telephone"
         };
     }
 }

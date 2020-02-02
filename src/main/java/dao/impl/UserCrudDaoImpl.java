@@ -18,8 +18,8 @@ import java.util.Optional;
 public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao {
     private static Logger LOGGER = Logger.getLogger(UserCrudDaoImpl.class);
 
-    private FetcherManager fetcherManager = FetcherManager.getInstance();
-    private static Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(User.class).get();
+    private static final FetcherManager fetcherManager = FetcherManager.getInstance();
+    private static final Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(User.class).get();
 
     private static final String FIND_BY_ID_QUERY;
     private static final String FIND_BY_EMAIL_QUERY;

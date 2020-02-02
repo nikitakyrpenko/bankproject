@@ -73,7 +73,7 @@ public class CreditAccount extends Account implements InterestChargeable {
                 ", rate=" + rate +
                 ", charge=" + charge +
                 ", liability=" + liability +
-                "} " + super.toString();
+                "} " + super.toString() + "\n";
     }
 
     @Override

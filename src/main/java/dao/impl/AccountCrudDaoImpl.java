@@ -20,11 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements AccountDao {
-
     private static Logger LOGGER = Logger.getLogger(AccountCrudDaoImpl.class);
 
-    private static Map<Enum, String> ACCOUNT_TO_QUERY = QueryManager.getInstance().getQueryMap(Account.class).get();
-    private static final FetcherManager fetcherManager = FetcherManager.getInstance();
+    private static final Map<Enum, String> ACCOUNT_TO_QUERY = QueryManager.getInstance().getQueryMap(Account.class).get();
+    private final FetcherManager fetcherManager = FetcherManager.getInstance();
     private static final String FIND_BY_ID_QUERY;
     private static final String FIND_ALL_ACCOUNTS_QUERY;
     private static final String FIND_ALL_ACCOUNTS_PAGEABLE;
@@ -33,7 +32,6 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
     private static final String UPDATE_DEPOSIT_QUERY;
     private static final String UPDATE_CREDIT_QUERY ;
     private static final String FIND_ALL_ACCOUNT_BY_USER;
-
 
     static {
         FIND_BY_ID_QUERY             = ACCOUNT_TO_QUERY.get(AccountQuery.FIND_BY_ID);
@@ -148,6 +146,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
                 "balance",
                 "deposit_account_rate",
                 "credit_limit",
+                "credit_rate",
                 "charge_per_month",
                 "credit_liabilities",
         };

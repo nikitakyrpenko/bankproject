@@ -81,7 +81,7 @@ public class Operation {
                 ", senderOfTransaction=" + senderOfTransaction +
                 ", dateOfTransaction=" + dateOfTransaction +
                 ", transfer=" + transfer +
-                '}';
+                '}'+"\n";
     }
 
     public static class Builder{
@@ -121,6 +121,4 @@ public class Operation {
              return new Operation(this);
          }
     }
-
-
 }

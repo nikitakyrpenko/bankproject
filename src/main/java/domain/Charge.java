@@ -44,7 +44,7 @@ public class Charge {
                 ", charge=" + charge +
                 ", chargeType=" + chargeType +
                 ", account=" + account +
-                '}';
+                '}'+"\n";
     }
 
     @Override

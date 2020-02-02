@@ -109,6 +109,7 @@ public class OperationCrudDaoImpl extends AbstractCrudDaoImp<Operation> implemen
                 "receiver_balance",
                 "receiver_deposit_account_rate",
                 "receiver_credit_limit",
+                "receiver_credit_rate",
                 "receiver_charge_per_month",
                 "receiver_credit_liabilities",
         };
@@ -121,6 +122,7 @@ public class OperationCrudDaoImpl extends AbstractCrudDaoImp<Operation> implemen
                 "sender_balance",
                 "sender_deposit_account_rate",
                 "sender_credit_limit",
+                "sender_credit_rate",
                 "sender_charge_per_month",
                 "sender_credit_liabilities",
         };

@@ -46,6 +46,7 @@ public class FetcherManager {
         Account accountToReturn = null;
         try {
             AccountType accountType = resultSet.getInt(columnLabels[0]) == 1 ? AccountType.DEPOSIT : AccountType.CREDIT;
+            System.out.println(accountType);
             if (accountType == AccountType.DEPOSIT) {
                 accountToReturn = new DepositAccount.DepositAccountBuilder()
                         .withId(resultSet.getInt(columnLabels[1]))
@@ -59,9 +60,9 @@ public class FetcherManager {
                         .withId(resultSet.getInt(columnLabels[1]))
                         .withDate(resultSet.getDate(columnLabels[2]))
                         .withBalance(resultSet.getDouble(columnLabels[3]))
-                        .withCreditLimit(resultSet.getDouble(columnLabels[4]))
-                        .withCreditRate(resultSet.getDouble(columnLabels[5]))
-                        .withCreditLiability(resultSet.getDouble(columnLabels[6]))
+                        .withCreditLimit(resultSet.getDouble(columnLabels[5]))
+                        .withCreditRate(resultSet.getDouble(columnLabels[6]))
+                        .withCreditLiability(resultSet.getDouble(columnLabels[7]))
                         .withAccountType(accountType)
                         .build();
             }
