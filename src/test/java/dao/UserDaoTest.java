@@ -1,78 +1,54 @@
 package dao;
 
+import dao.exception.DataBaseSqlRuntimeException;
 import dao.impl.UserCrudDaoImpl;
 import dao.util.ConnectorDB;
 import domain.User;
 import domain.enums.Role;
 import org.apache.ibatis.jdbc.ScriptRunner;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 
 public class UserDaoTest {
     private static ConnectorDB connection;
     private static UserCrudDaoImpl userCrudDao;
 
-    private static final String SCHEMA =
-            "DROP TABLE IF EXISTS users; DROP TABLE IF EXISTS roles;";
+    private static String SCHEMA;
 
-    private static final String SCHEMA2 =
-            "DROP TABLE IF EXISTS users; DROP TABLE IF EXISTS roles; " +
-                    " CREATE TABLE IF NOT EXISTS roles (" +
-                    "  role_id int NOT NULL AUTO_INCREMENT," +
-                    "  role_description varchar(255) NOT NULL," +
-                    "  PRIMARY KEY (role_id)," +
-                    "  UNIQUE KEY role_d (role_id)" +
-                    "); INSERT INTO roles(role_description) VALUES ('USER'),('ADMIN'); "+
-
-            "CREATE TABLE IF NOT EXISTS users(" +
-            "id int NOT NULL AUTO_INCREMENT," +
-            "firstname varchar(15) NOT NULL," +
-            "surname varchar(15) NOT NULL," +
-            "email varchar(50) NOT NULL," +
-            "passwords varchar(100) NOT NULL," +
-            "telephone varchar(15) NOT NULL," +
-            "fk_roles_users int NOT NULL," +
-            " PRIMARY KEY (id)," +
-            " CONSTRAINT id" +
-            " UNIQUE (id)," +
-            " CONSTRAINT email" +
-            " UNIQUE (email)," +
-            " FOREIGN KEY (fk_roles_users)" +
-            " REFERENCES roles (role_id));" +
-                    " INSERT INTO users VALUES " +
-                    "(1,'Freya','Rodriguez','dolor.Donec@etmagnaPraesent.net','1','715-0987',1)," +
-                    "(2,'Fleur','Morgan','Vivamus.rhoncus.Donec@lacusEtiam.net','1','612-4806',1)," +
-                    "(3,'Kim','Butler','ante.iaculis@Donecnibhenim.ca','451-2416','1',1)," +
-                    "(4,'Amaya','Davis','Vivamus.euismod.urna@ligulaAeneangravida.edu','1','338-6234',1);";
-
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
 
     @BeforeClass
     public static void init() throws Exception{
+        //SCHEMA = new String(Files.readAllBytes(Paths.get(System.getProperty("user.dir")+"/src/main/resources/schema.sql")));
         connection = new ConnectorDB("h2connection");
         userCrudDao = new UserCrudDaoImpl(connection);
-        Statement statement = connection.getConnection().createStatement();
-        statement.executeUpdate(SCHEMA2);
+
     }
 
     @Test
-    public void userCrudDaoFindAllShouldReturn4IfTableContains4Records(){
-        Assert.assertEquals(userCrudDao.findAll().size(),4);
+    public void userCrudDaoFindAllShouldReturn11IfTableContains11Records(){
+        assertEquals(userCrudDao.findAll().size(),12);
     }
 
     @Test
-    public void userCrudDaoFindByIdShouldReturnCorrectRecordIfRecordExistInTable(){
+    public void userCrudDaoFindByIdShouldReturnCorrectRecordIfRecordWithIdExistInTable(){
         Optional actual = userCrudDao.findById(1);
         User expected   = User.builder()
                 .withId(1)
@@ -83,9 +59,67 @@ public class UserDaoTest {
                 .withPassword("1")
                 .withRole(Role.CLIENT)
                 .build();
-        Assert.assertEquals(expected,actual.get());
+        assertEquals(expected,actual.get());
     }
 
+    @Test
+    public void userCrudDaoFindByIdShouldThrowNoSuchElementExceptionIfUserWithSuchIdIsAbsent(){
+        expectedException.expect(NoSuchElementException.class);
+        expectedException.expectMessage("No value present");
+        Optional<User> byId = userCrudDao.findById(101);
+        byId.get();
+    }
+
+    @Test
+    public void userCrudDaoFindByEmailShouldReturnCorrectRecordIfRecordWithSuchEmailPresent(){
+        User expected = User.builder()
+                .withId(11)
+                .withName("Mykyta")
+                .withSurname("Kyrpenko")
+                .withEmail("nikitakyrpenko@gmail.com")
+                .withPassword("12134r56")
+                .withTelephone("380508321899")
+                .withRole(Role.CLIENT)
+                .build();
+        Optional<User> actual = userCrudDao.findByEmail("nikitakyrpenko@gmail.com");
+        assertEquals(expected, actual.get());
+    }
+
+    @Test
+    public void userCrudDaoFindByEmailShouldThrowNoSuchElementExceptionIfRecordWithSuchIdAbsent(){
+        expectedException.expect(NoSuchElementException.class);
+        expectedException.expectMessage("No value present");
+        userCrudDao.findByEmail("123").get();
+    }
+
+    @Test
+    public void userCrudDaoFindByAccountIdShouldReturnCorrectUserByAccountId(){
+        User expected = User.builder()
+                .withId(3)
+                .withName("Kim")
+                .withSurname("Butler")
+                .withEmail("ante.iaculis@Donecnibhenim.ca")
+                .withPassword("451-2416")
+                .withTelephone("1")
+                .withRole(Role.CLIENT)
+                .build();
+        Optional<User> user = userCrudDao.findUserByAccountId(3);
+        assertEquals(expected, user.get());
+    }
+
+    @Test
+    public void userCrudDaoFindByIdShouldThrowIllegalArgumentExceptionIfParameterIsNull(){
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Passed value should not be null");
+        userCrudDao.findById(null);
+    }
+
+    @Test
+    public void userCrudDaoFindByEmailShouldThrowIllegalArgumentExceptionIfParameterIsNull(){
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Passed value should not be null");
+        userCrudDao.findByEmail(null);
+    }
 
     @AfterClass
     public static void destroy() throws SQLException {
