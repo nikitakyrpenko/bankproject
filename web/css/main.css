@@ -1,0 +1,27 @@
+html, body {
+    height:100%;
+}
+
+select#lang option[value="UA"] {
+    background-image:url(../img/Ukr.png); 
+}
+select#lang option[value="ENG"] {
+    background-image:url(../img/USA.png); 
+}
+
+.back{
+    background-image: url('../img/Business.png');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 70%;
+}
+.form-cust{
+    background-color: #fff;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    padding: 15px;
+    box-shadow: 10px 5px 5px #000;
+    border-radius: 5px;
+}
