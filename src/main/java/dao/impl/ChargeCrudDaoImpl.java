@@ -95,7 +95,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
     private String[] getAccountColumnLabels() {
         return new String[]{
                 "fk_accounts_type_accounts",
-                "accounts.id",
+                "accounts.account_id",
                 "expiration_date",
                 "balance",
                 "deposit_account_rate",
@@ -108,7 +108,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
 
     private String[] getChargeColumnLabels() {
         return new String[]{
-                "charges.id",
+                "charges.charge_id",
                 "charge",
                 "fk_charge_types_charge",
         };
@@ -116,7 +116,7 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
     private String[] getUserColumnLabels() {
         return new String[]{
                 "fk_roles_users",
-                "id",
+                "user_id",
                 "email",
                 "firstname",
                 "surname",

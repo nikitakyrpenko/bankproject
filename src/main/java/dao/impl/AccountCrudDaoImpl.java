@@ -129,7 +129,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
     private String[] getUserColumnLabels() {
         return new String[]{
                 "fk_roles_users",
-                "users.id",
+                "users.user_id",
                 "email",
                 "firstname",
                 "surname",
@@ -141,7 +141,7 @@ public class AccountCrudDaoImpl extends AbstractCrudDaoImp<Account> implements A
     private String[] getAccountColumnLabels(){
         return new String[]{
                 "fk_accounts_type_accounts",
-                "accounts.id",
+                "accounts.account_id",
                 "expiration_date",
                 "balance",
                 "deposit_account_rate",

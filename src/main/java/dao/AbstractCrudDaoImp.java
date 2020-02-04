@@ -10,9 +10,7 @@ import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableDao<E> {
     private static Logger LOGGER = Logger.getLogger(AbstractCrudDaoImp.class);
@@ -44,6 +42,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
     }
 
     protected <P> Optional<E> findByParam(P param, String findByParam, BiConsumer<PreparedStatement, P> designatedParamSetter) {
+        checkForNull(param);
         try (final PreparedStatement preparedStatement =
                      connector.getConnection().prepareStatement(findByParam)) {
             designatedParamSetter.accept(preparedStatement, param);
@@ -63,6 +62,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
     }
 
     protected <P> List<E> findAllByParams(P p, String findByParam, BiConsumer<PreparedStatement, P> designatedParamSetter) {
+        checkForNull(p);
         List<E> result = new ArrayList<>();
         try (final PreparedStatement preparedStatement =
                      connector.getConnection().prepareStatement(findByParam)) {
@@ -77,6 +77,9 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
+        }
+        if (result.isEmpty()){
+            throw new NoSuchElementException("No value present");
         }
 
         return result;
@@ -131,4 +134,10 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
     }
 
     protected abstract E mapResultSetToEntity(ResultSet resultSet) throws SQLException;
+
+    protected void checkForNull(Object object){
+        if (Objects.isNull(object)){
+            throw new IllegalArgumentException("Passed value should not be null");
+        }
+    }
 }

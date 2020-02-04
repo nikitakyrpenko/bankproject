@@ -94,7 +94,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
     private String[] getUserColumnLabels() {
         return new String[]{
                 "fk_roles_users",
-                "id",
+                "user_id",
                 "email",
                 "firstname",
                 "surname",
