@@ -60,14 +60,14 @@
         <div class="tab-content" id="myTabContent">
           <!-- Login-->
           <div class="tab-pane fade show active" id="login" role="tabpanel">
-            <form>
+            <form action="UserController" method="post">
               <div class="form-group">
                 <label for="logEmail">Email address</label>
-                <input type="email" class="form-control" id="logEmail" aria-describedby="emailHelp">
+                <input type="email" name="email" class="form-control" id="logEmail" aria-describedby="emailHelp">
               </div>
               <div class="form-group">
                 <label for="logPassword">Password</label>
-                <input type="password" class="form-control" id="logPassword">
+                <input type="password" name="password" class="form-control" id="logPassword">
               </div>
               <button type="submit" class="btn btn-primary" id="loginBtn">Log in</button>
             </form>

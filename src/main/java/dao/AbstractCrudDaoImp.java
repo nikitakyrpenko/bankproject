@@ -5,7 +5,6 @@ import dao.util.consumer.BiConsumer;
 import dao.util.ConnectorDB;
 import dao.util.Page;
 import dao.util.Pageable;
-import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +12,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableDao<E> {
-    private static Logger LOGGER = Logger.getLogger(AbstractCrudDaoImp.class);
+    //private static Logger LOGGER = Logger.getLogger(AbstractCrudDaoImp.class);
 
     protected final ConnectorDB connector;
     private final String findByIdQuery;
@@ -54,7 +53,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             }
 
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            //LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
         }
 
@@ -75,7 +74,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
             }
 
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            //LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
         }
         if (result.isEmpty()){
@@ -95,7 +94,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 result.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            //LOGGER.error(e.getMessage());
             throw new DataBaseSqlRuntimeException("", e);
         }
         return result;
@@ -118,7 +117,7 @@ public abstract class AbstractCrudDaoImp<E> implements CrudDao<E>, CrudPageableD
                 result.add(mapResultSetToEntity(resultSet));
             }
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            //LOGGER.error(e.getMessage());
         }
         return new Pageable<>(result, page.getPageNumber(), page.getItemsPerPage(), 10);
     }
