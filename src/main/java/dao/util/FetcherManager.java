@@ -4,13 +4,14 @@ import domain.*;
 import domain.enums.AccountType;
 import domain.enums.ChargeType;
 import domain.enums.Role;
+import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class FetcherManager {
-    //private static Logger LOGGER = Logger.getLogger(FetcherManager.class);
+    private static Logger LOGGER = Logger.getLogger(FetcherManager.class);
 
     private static final FetcherManager INSTANCE = new FetcherManager();
 
@@ -35,7 +36,7 @@ public class FetcherManager {
                     .withRole(role)
                     .build();
         } catch (SQLException e) {
-           // LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return Optional.ofNullable(userToReturn);
     }
@@ -67,7 +68,7 @@ public class FetcherManager {
                         .build();
             }
         } catch (SQLException e) {
-            //LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return Optional.ofNullable(accountToReturn);
     }
@@ -82,7 +83,7 @@ public class FetcherManager {
                     .withDate(resultSet.getDate(columnLabels[3]))
                     .build();
         } catch (SQLException e) {
-            //LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return Optional.ofNullable(operation);
     }
@@ -95,7 +96,7 @@ public class FetcherManager {
             ChargeType chargeType = resultSet.getInt(columnLabels[2]) == 1 ? ChargeType.DEPOSIT_ARRIVAL : ChargeType.CREDIT_ARRIVAL;
             chargeToReturn = new Charge(id, charge, chargeType);
         } catch (SQLException e) {
-            //LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return Optional.ofNullable(chargeToReturn);
     }

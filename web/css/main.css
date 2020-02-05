@@ -3,15 +3,15 @@ html, body {
 }
 
 select#lang option[value="UA"] {
-    background-image:url(../img/Ukr.png); 
+    background-image:url('../img/UKR.png');
 }
 select#lang option[value="ENG"] {
-    background-image:url(../img/USA.png); 
+    background-image:url('../img/USA.png');
 }
 
 .back{
     background-image: url('../img/Business.png');
-    height: 100%;
+    height: 110%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -24,4 +24,30 @@ select#lang option[value="ENG"] {
     padding: 15px;
     box-shadow: 10px 5px 5px #000;
     border-radius: 5px;
+}
+.card-cust{
+    margin-top: 20px;
+    /*    padding-left: 10px;*/
+}
+
+.list-group-item{
+    font-size: 13px;
+    line-height: 13px;
+
+}
+hr{
+    margin: 8px;
+}
+.hr-gray{
+    color:dimgray;
+}
+
+.row-cust{
+    padding-left: 24px;
+}
+.btn-cust{
+    margin: 10px;
+}
+.a-cust{
+    margin-left: 10px;
 }

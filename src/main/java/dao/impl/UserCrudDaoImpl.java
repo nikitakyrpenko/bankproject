@@ -8,6 +8,8 @@ import dao.util.QueryManager;
 import dao.util.enums.UserQuery;
 import domain.User;
 import domain.enums.Role;
+import org.apache.log4j.Logger;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao {
-   // private static Logger LOGGER = Logger.getLogger(UserCrudDaoImpl.class);
+   private static Logger LOGGER = Logger.getLogger(UserCrudDaoImpl.class);
 
     private static final FetcherManager fetcherManager = FetcherManager.getInstance();
     private static final Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(User.class).get();
@@ -70,7 +72,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            //LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -86,7 +88,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
 
             statement.executeUpdate();
         } catch (SQLException e) {
-           // LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 

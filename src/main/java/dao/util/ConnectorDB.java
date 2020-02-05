@@ -1,6 +1,5 @@
 package dao.util;
 
-import com.mysql.jdbc.log.Log;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 

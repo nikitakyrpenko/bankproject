@@ -1,23 +1,16 @@
 package dao;
 
-import dao.exception.DataBaseSqlRuntimeException;
+
 import dao.impl.UserCrudDaoImpl;
 import dao.util.ConnectorDB;
 import domain.User;
 import domain.enums.Role;
-import org.apache.ibatis.jdbc.ScriptRunner;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
