@@ -1,8 +1,7 @@
 package domain;
 
-import domain.enums.Role;
-import java.util.Objects;
 
+import entity.enums.Role;
 public class User {
 
     private final Integer id;
@@ -53,25 +52,6 @@ public class User {
         return role;
     }
 
-
-
-    public static Builder builder(){ return new Builder();}
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(telephone, user.telephone) &&
-                role == user.role ;
-
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -82,13 +62,12 @@ public class User {
                 ", password='" + password + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", role=" + role +
-                '}'+"\n";
+                '}';
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, surname, email, password, telephone, role);
-    }
+    public static Builder builder(){ return new Builder();}
+
+
 
     public static class Builder{
         private Integer id;
@@ -132,4 +111,5 @@ public class User {
             return new User(this);
         }
     }
+
 }

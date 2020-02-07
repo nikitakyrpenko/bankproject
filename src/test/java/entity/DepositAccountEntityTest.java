@@ -1,6 +1,5 @@
-package domain;
+package entity;
 
-import domain.DepositAccount;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +11,9 @@ import java.util.Collection;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class DepositAccountTest {
+public class DepositAccountEntityTest {
 
-    public DepositAccount depositAccount;
+    public DepositAccountEntity depositAccount;
 
     @Parameterized.Parameter(0)
     public Double deposit;
@@ -38,7 +37,7 @@ public class DepositAccountTest {
 
     @Before
     public void init(){
-        depositAccount = new DepositAccount.DepositAccountBuilder()
+        depositAccount = new DepositAccountEntity.DepositAccountBuilder()
                 .withBalance(deposit)
                 .withDepositRate(depositRate)
                 .build();
@@ -50,7 +49,7 @@ public class DepositAccountTest {
     }
     @Test(expected = IllegalArgumentException.class)
     public void getChargeShouldThrowIllegalArgumentExceptionIfDepositRateLessThenZero(){
-        DepositAccount illegalDepositAccount = new DepositAccount.DepositAccountBuilder()
+        DepositAccountEntity illegalDepositAccount = new DepositAccountEntity.DepositAccountBuilder()
                 .withBalance(1000.0)
                 .withDepositRate(-0.1)
                 .build();

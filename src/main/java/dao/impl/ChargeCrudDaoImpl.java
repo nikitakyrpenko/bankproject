@@ -7,9 +7,9 @@ import dao.util.ConnectorDB;
 import dao.util.FetcherManager;
 import dao.util.QueryManager;
 import dao.util.enums.ChargeQuery;
-import domain.Account;
-import domain.Charge;
-import domain.User;
+import entity.AccountEntity;
+import entity.ChargeEntity;
+import entity.UserEntity;
 import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,13 +17,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements ChargeDao {
+public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<ChargeEntity> implements ChargeDao {
     private static Logger LOGGER = Logger.getLogger(ChargeCrudDaoImpl.class);
 
     private FetcherManager fetcherManager = FetcherManager.getInstance();
     private static Map<Enum, String> chargeToQuery = QueryManager
             .getInstance()
-            .getQueryMap(Charge.class)
+            .getQueryMap(ChargeEntity.class)
             .get();
 
     private static final String FIND_BY_ID_QUERY;
@@ -47,29 +47,29 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
     }
 
     @Override
-    protected Charge mapResultSetToEntity(ResultSet resultSet){
+    protected ChargeEntity mapResultSetToEntity(ResultSet resultSet){
 
-        User user = fetcherManager.fetchUser(resultSet, getUserColumnLabels())
+        UserEntity userEntity = fetcherManager.fetchUser(resultSet, getUserColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
 
-        Account account = fetcherManager.fetchAccount(resultSet, getAccountColumnLabels())
+        AccountEntity accountEntity = fetcherManager.fetchAccount(resultSet, getAccountColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
 
-        Charge charge = fetcherManager.fetchCharge(resultSet, getChargeColumnLabels())
+        ChargeEntity chargeEntity = fetcherManager.fetchCharge(resultSet, getChargeColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
 
-        account.setHolder(user);
-        charge.setAccount(account);
-        return charge;
+        accountEntity.setHolder(userEntity);
+        chargeEntity.setAccountEntity(accountEntity);
+        return chargeEntity;
     }
 
     @Override
-    public List<Charge> findAllChargesByAccountId(Integer id) {
+    public List<ChargeEntity> findAllChargesByAccountId(Integer id) {
         return findAllByParams(id, FIND_ALL_CHARGES_BY_ACCOUNT_ID, INT_PARAM_SETTER);
     }
 
     @Override
-    public void save(Charge entity) {
+    public void save(ChargeEntity entity) {
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(INSERT_QUERY)) {
             statement.setDouble(1, entity.getCharge());
             statement.setInt(2, entity.getChargeType().ordinal());
@@ -81,11 +81,11 @@ public class ChargeCrudDaoImpl extends AbstractCrudDaoImp<Charge> implements Cha
     }
 
     @Override
-    public void update(Charge entity) {
+    public void update(ChargeEntity entity) {
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(UPDATE_QUERY)) {
             statement.setDouble(1, entity.getCharge());
             statement.setInt(2, entity.getChargeType().ordinal());
-            statement.setInt(3, entity.getAccount().getId());
+            statement.setInt(3, entity.getAccountEntity().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());

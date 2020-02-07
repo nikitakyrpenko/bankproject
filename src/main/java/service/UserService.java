@@ -1,9 +1,14 @@
 package service;
 
+import dao.util.Page;
+import dao.util.Pageable;
+import domain.Account;
 import domain.User;
+import entity.AccountEntity;
 import entity.UserEntity;
 import service.validator.DuplicateException;
 import service.validator.ValidateException;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -11,10 +16,12 @@ import java.util.NoSuchElementException;
 
 public interface UserService {
 
-    void register(UserEntity user) throws DuplicateException, ValidateException;
+    void register(User user) throws DuplicateException, ValidateException;
 
-    UserEntity login(String email, String password) throws NoSuchElementException;
+    User login(String email, String password) throws NoSuchElementException;
 
-    List<User> findAll();
+    List<Account> findAllUsersAccounts(Integer id);
+
+    Pageable<List<Account>> findAllUsersAccountsPageable(Integer id, Page page);
 
 }

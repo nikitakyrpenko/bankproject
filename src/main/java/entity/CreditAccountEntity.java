@@ -1,15 +1,11 @@
-package domain;
+package entity;
 
 import domain.abstraction.InterestChargeable;
-import entity.AccountEntity;
-import entity.ChargeEntity;
-import entity.CreditAccountEntity;
 import entity.enums.AccountType;
 import entity.enums.ChargeType;
-
 import java.util.Objects;
 
-public class CreditAccount extends Account implements InterestChargeable {
+public class CreditAccountEntity extends AccountEntity {
 
     private static final int CREDIT_PERIOD                = 12;
     private static final int TOTAL_CREDIT_PERIOD_IN_MONTH = 36;
@@ -21,7 +17,7 @@ public class CreditAccount extends Account implements InterestChargeable {
 
     private Double       liability;
 
-    private CreditAccount(CreditAccountBuilder builder) {
+    private CreditAccountEntity(CreditAccountBuilder builder) {
         super(builder);
         this.limit     = builder.limit;
         this.rate      = builder.rate;
@@ -37,14 +33,6 @@ public class CreditAccount extends Account implements InterestChargeable {
 
     private Double calculateCreditLiabilityPerMonth() {
         return (limit * percents()) / (1 - Math.pow(1 + percents(), -TOTAL_CREDIT_PERIOD_IN_MONTH));
-    }
-
-    @Override
-    public Charge processCharge() {
-        //TODO how to set charge id ?
-        Charge incomingCharge = new Charge(1, this.charge, ChargeType.CREDIT_ARRIVAL, this);
-        this.liability        = this.liability + this.charge;
-        return incomingCharge;
     }
 
     @Override
@@ -79,14 +67,23 @@ public class CreditAccount extends Account implements InterestChargeable {
                 "} " + super.toString() + "\n";
     }
 
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreditAccountEntity that = (CreditAccountEntity) o;
+        return Objects.equals(limit, that.limit) &&
+                Objects.equals(rate, that.rate) &&
+                Objects.equals(charge, that.charge) &&
+                Objects.equals(liability, that.liability);
+    }
 
     @Override
     public int hashCode() {
         return Objects.hash(limit, rate, charge, liability);
     }
 
-    public static class CreditAccountBuilder extends Account.AccountBuilder<CreditAccountBuilder> {
+    public static class CreditAccountBuilder extends AccountBuilder<CreditAccountBuilder> {
         private Double rate;
         private Double limit;
         private Double liability;
@@ -96,7 +93,6 @@ public class CreditAccount extends Account implements InterestChargeable {
         }
 
         public CreditAccountBuilder withCreditLimit(Double limit) {
-            super.withBalance(limit);
             this.limit = limit;
             return self();
         }
@@ -115,8 +111,8 @@ public class CreditAccount extends Account implements InterestChargeable {
         }
 
         @Override
-        public CreditAccount build() {
-            return new CreditAccount(this);
+        public CreditAccountEntity build() {
+            return new CreditAccountEntity(this);
         }
 
         @Override

@@ -1,45 +1,30 @@
-package domain;
+package entity;
 
 import domain.abstraction.OperationProcessable;
-import entity.AccountEntity;
-import entity.OperationEntity;
-import entity.UserEntity;
 import entity.enums.AccountType;
 
 import java.util.Date;
 import java.util.List;
 
-public abstract class Account implements OperationProcessable {
+public abstract class AccountEntity  {
+
     private final Integer id;
-    private final Date expirationDate;
-    private User holder;
+    private final Date    expirationDate;
+    private UserEntity holder;
     private Double          balance;
 
-    public Account(AccountBuilder builder) {
+    public AccountEntity(AccountBuilder builder) {
         this.id             = builder.id;
         this.holder         = builder.holder;
         this.balance        = builder.balance;
         this.expirationDate = builder.expirationDate;
     }
 
-    @Override
-    public void processTransfer(OperationEntity operationEntity) {
-        final Double  transfer = operationEntity.getTransfer();
-        final AccountEntity sender   = operationEntity.getSenderOfTransaction();
-        final AccountEntity receiver = operationEntity.getReceiverOfTransaction();
-        if (this.equals(sender)){
-            this.balance = this.balance - transfer;
-        }
-        if (this.equals(receiver)){
-            this.balance = this.balance + transfer;
-        }
-    }
-
     public Integer getId() {
         return id;
     }
 
-    public User getHolder() {
+    public UserEntity getHolder() {
         return holder;
     }
 
@@ -59,7 +44,7 @@ public abstract class Account implements OperationProcessable {
 
     public abstract AccountType getAccountType();
 
-    public void setHolder(User holder) {
+    public void setHolder(UserEntity holder) {
         this.holder = holder;
     }
 
@@ -75,9 +60,9 @@ public abstract class Account implements OperationProcessable {
 
     public abstract static  class AccountBuilder<SELF extends AccountBuilder<SELF>>{
         private Integer         id;
-        private User holder;
+        private UserEntity holder;
         private Double          balance;
-        private List<Operation> operationEntities;
+        private List<OperationEntity> operationEntities;
         private Date            expirationDate;
 
         public AccountBuilder(){}
@@ -86,7 +71,7 @@ public abstract class Account implements OperationProcessable {
             this.id = id;
             return self();
         }
-        public SELF withHolder(User holder){
+        public SELF withHolder(UserEntity holder){
             this.holder = holder;
             return self();
         }
@@ -98,11 +83,11 @@ public abstract class Account implements OperationProcessable {
             this.balance = balance;
             return self();
         }
-        public SELF withOperations(List<Operation> operationEntities){
+        public SELF withOperations(List<OperationEntity> operationEntities){
             this.operationEntities = operationEntities;
             return self();
         }
-        public abstract Account build();
+        public abstract AccountEntity build();
 
         @SuppressWarnings("unchecked")
         protected SELF self(){

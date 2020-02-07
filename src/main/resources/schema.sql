@@ -107,9 +107,9 @@ VALUES (1, '2020-09-06', 88732, 0.3, 0, 0, 0, 0, 1, 1),
 
 
 
-DROP TABLE IF EXISTS operations;
+DROP TABLE IF EXISTS operationEntities;
 
-CREATE TABLE operations
+CREATE TABLE operationEntities
 (
     operation_id   int          NOT NULL AUTO_INCREMENT,
     purpose        varchar(255) NOT NULL,
@@ -120,7 +120,7 @@ CREATE TABLE operations
 );
 
 
-INSERT INTO operations
+INSERT INTO operationEntities
 VALUES (1, 'Aliquam erat volutpat.', '2020-08-16', 65305),
        (2, 'ipsum leo', '2020-11-22', 19866),
        (3, 'at, nisi.', '2019-06-19', 70987),
@@ -154,7 +154,7 @@ CREATE TABLE accounts_operations
     fk_operations_operations_id int NOT NULL,
     PRIMARY KEY (account_operation_id),
     UNIQUE KEY account_operation_id (account_operation_id),
-    FOREIGN KEY (fk_operations_operations_id) REFERENCES operations (operation_id),
+    FOREIGN KEY (fk_operations_operations_id) REFERENCES operationEntities (operation_id),
     FOREIGN KEY (fk_accounts_sender) REFERENCES accounts (account_id),
     FOREIGN KEY (fk_accounts_receiver) REFERENCES accounts (account_id)
 );
@@ -190,7 +190,7 @@ DROP TABLE IF EXISTS @;
 CREATE TABLE charges
 (
     charge_id              int    NOT NULL AUTO_INCREMENT,
-    charge                 double NOT NULL,
+    chargeEntity                 double NOT NULL,
     fk_charge_types_charge int    NOT NULL,
     fk_account_charge      int    NOT NULL,
     PRIMARY KEY (charge_id),

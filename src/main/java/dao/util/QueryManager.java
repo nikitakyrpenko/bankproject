@@ -4,10 +4,10 @@ import dao.util.enums.AccountQuery;
 import dao.util.enums.ChargeQuery;
 import dao.util.enums.OperationQuery;
 import dao.util.enums.UserQuery;
-import domain.Account;
-import domain.Charge;
-import domain.Operation;
-import domain.User;
+import entity.AccountEntity;
+import entity.ChargeEntity;
+import entity.OperationEntity;
+import entity.UserEntity;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -86,6 +86,7 @@ public class QueryManager {
     private static final String ACCOUNT_UPDATE_DEPOSIT_ACCOUNT = "UPDATE accounts SET expiration_date = ?, balance = ?, deposit_account_rate = ? WHERE account_id = ?";
     private static final String ACCOUNT_UPDATE_CREDIT_ACCOUNT = "UPDATE accounts SET expiration_date = ?, balance = ?, credit_limit = ?, credit_rate = ?, charge_per_month = ?, credit_liabilities= ? WHERE account_id = ?";
     private static final String ACCOUNT_FIND_BY_USER_ID = "select * from accounts INNER JOIN users ON accounts.fk_users_accounts = users.user_id WHERE users.user_id = ?";
+    private static final String ACCOUNT_FIND_ALL_BU_USER_ID_PAGEABLE = ACCOUNT_FIND_BY_USER_ID + "LIMIT ?,?";
 
     private static final String CHARGE_FIND_ALL = "SELECT * " +
             "FROM" +
@@ -118,14 +119,14 @@ public class QueryManager {
 
     public Optional<Map<Enum, String>> getQueryMap(Class cls){
         Map<Enum, String> queryMap = null;
-        if (Operation.class == cls) {
+        if (OperationEntity.class == cls) {
             queryMap = new EnumMap(OperationQuery.class);
             queryMap.put(OperationQuery.FIND_ALL, OPERATION_FIND_ALL);
             queryMap.put(OperationQuery.FIND_ALL_BY_ID, OPERATION_FIND_ALL_BY_ID);
             queryMap.put(OperationQuery.FIND_ALL_PAGEABLE, OPERATION_FIND_ALL_PAGEABLE);
             queryMap.put(OperationQuery.FIND_BY_ACCOUNT, OPERATION_FIND_BY_ACCOUNT);
         }
-        if (User.class == cls) {
+        if (UserEntity.class == cls) {
             queryMap = new EnumMap(UserQuery.class);
             queryMap.put(UserQuery.FIND_ALL, USER_FIND_ALL);
             queryMap.put(UserQuery.FIND_BY_ID, USER_FIND_BY_ID);
@@ -135,7 +136,7 @@ public class QueryManager {
             queryMap.put(UserQuery.INSERT_USER, USER_INSERT);
             queryMap.put(UserQuery.UPDATE_USER, USER_UPDATE);
         }
-        if (cls == Account.class) {
+        if (cls == AccountEntity.class) {
             queryMap = new EnumMap(AccountQuery.class);
             queryMap.put(AccountQuery.FIND_ALL, ACCOUNT_FIND_ALL);
             queryMap.put(AccountQuery.FIND_BY_ID, ACCOUNT_FIND_BY_ID);
@@ -146,7 +147,7 @@ public class QueryManager {
             queryMap.put(AccountQuery.UPDATE_CREDIT_ACCOUNT, ACCOUNT_UPDATE_CREDIT_ACCOUNT);
             queryMap.put(AccountQuery.UPDATE_DEPOSIT_ACCOUNT, ACCOUNT_UPDATE_DEPOSIT_ACCOUNT);
         }
-        if (cls == Charge.class){
+        if (cls == ChargeEntity.class){
             queryMap = new EnumMap(ChargeQuery.class);
             queryMap.put(ChargeQuery.FIND_ALL, CHARGE_FIND_ALL);
             queryMap.put(ChargeQuery.FIND_BY_ID, CHARGE_FIND_BY_ID);

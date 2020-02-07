@@ -1,6 +1,5 @@
-package domain;
+package entity;
 
-import domain.CreditAccount;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +11,9 @@ import java.util.Collection;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class CreditAccountTest {
+public class CreditAccountEntityTest {
 
-    public CreditAccount creditAccount;
+    public CreditAccountEntity creditAccount;
 
     @Parameter(0)
     public Double creditLimit;
@@ -38,7 +37,7 @@ public class CreditAccountTest {
 
     @Before
     public void init(){
-         creditAccount = new CreditAccount.CreditAccountBuilder()
+         creditAccount = new CreditAccountEntity.CreditAccountBuilder()
                  .withCreditLimit(creditLimit)
                  .withCreditRate(creditRate)
                  .build();
@@ -53,7 +52,7 @@ public class CreditAccountTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getChargeThrowIllegalArgumentExceptionIfCreditRateLessThanZero(){
-        CreditAccount creditAccount = new CreditAccount.CreditAccountBuilder()
+        CreditAccountEntity creditAccount = new CreditAccountEntity.CreditAccountBuilder()
                 .withCreditLimit(0.0)
                 .withCreditRate(0.0)
                 .build();

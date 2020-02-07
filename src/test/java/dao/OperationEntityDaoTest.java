@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
-public class OperationDaoTest {
+public class OperationEntityDaoTest {
 
     private static ConnectorDB connection;
     private static OperationCrudDaoImpl operationCrudDao;

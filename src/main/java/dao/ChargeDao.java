@@ -1,11 +1,12 @@
 package dao;
 
-import domain.Charge;
+import entity.ChargeEntity;
 
 import java.util.List;
 
-public interface ChargeDao extends CrudPageableDao<Charge> {
+public interface ChargeDao extends CrudPageableDao<ChargeEntity> {
 
-    List<Charge> findAllChargesByAccountId(Integer id);
+    //TODO FINDALLBYACCOUNTPAGEABLE
+    List<ChargeEntity> findAllChargesByAccountId(Integer id);
 
 }

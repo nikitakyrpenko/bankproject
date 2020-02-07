@@ -2,18 +2,15 @@ package dao;
 
 import dao.impl.ChargeCrudDaoImpl;
 import dao.util.ConnectorDB;
-import domain.Charge;
-import domain.enums.ChargeType;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class ChargeDaoTest {
+public class ChargeEntityDaoTest {
 
     private static ConnectorDB connection;
     private static ChargeCrudDaoImpl chargeCrudDao;

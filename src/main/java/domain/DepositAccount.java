@@ -1,16 +1,19 @@
 package domain;
 
 import domain.abstraction.InterestChargeable;
-import domain.enums.AccountType;
-import domain.enums.ChargeType;
-import java.util.List;
+import entity.AccountEntity;
+import entity.ChargeEntity;
+import entity.DepositAccountEntity;
+import entity.enums.AccountType;
+import entity.enums.ChargeType;
+
 import java.util.Objects;
 
 public class DepositAccount extends Account implements InterestChargeable {
 
     private final Double          depositRate;
     private final Double          depositAmount;
-    private final AccountType     accountType;
+    private final AccountType accountType;
 
     private DepositAccount(DepositAccountBuilder builder) {
         super(builder);
@@ -35,9 +38,8 @@ public class DepositAccount extends Account implements InterestChargeable {
         Double deposit         = super.getBalance();
         Double value           = deposit * depositRate;
         super.setBalance(deposit + value);
-        Charge incomingCharge  = new Charge(1, value, ChargeType.DEPOSIT_ARRIVAL);
-        incomingCharge.setAccount(this);
-       return incomingCharge;
+        Charge incomingChargeEntity = new Charge(1, value, ChargeType.DEPOSIT_ARRIVAL,this);
+        return incomingChargeEntity;
     }
 
     @Override
@@ -50,48 +52,26 @@ public class DepositAccount extends Account implements InterestChargeable {
         return super.getBalance() * depositRate;
     }
 
-    @Override
-    public String toString() {
-        return "DepositAccount{" +
-                "depositRate=" + depositRate +
-                ", depositAmount=" + depositAmount +
-                ", accountType=" + accountType +
-                "} " + super.toString() + "\n";
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DepositAccount that = (DepositAccount) o;
-        return Objects.equals(depositRate, that.depositRate) &&
-                Objects.equals(depositAmount, that.depositAmount) &&
-                accountType == that.accountType;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(depositRate, depositAmount, accountType);
-    }
-
-    public static class DepositAccountBuilder extends AccountBuilder<DepositAccountBuilder>{
+    public static class DepositAccountBuilder extends AccountBuilder<DepositAccount.DepositAccountBuilder> {
 
         private Double depositRate;
         private Double depositAmount;
         private AccountType accountType;
 
-        public DepositAccountBuilder withDepositRate(double depositRate){
+        public DepositAccount.DepositAccountBuilder withDepositRate(double depositRate){
             if (depositRate <= 0.0){throw new IllegalArgumentException("deposit rate should be more than zero");}
             this.depositRate = depositRate;
             return this;
         }
-        public DepositAccountBuilder withDepositAmount(double depositAmount){
+        public DepositAccount.DepositAccountBuilder withDepositAmount(double depositAmount){
             super.withBalance(depositAmount);
             this.depositAmount = depositAmount;
             return this;
         }
 
-        public DepositAccountBuilder withAccountType(AccountType accountType){
+        public DepositAccount.DepositAccountBuilder withAccountType(AccountType accountType){
             this.accountType = accountType;
             return this;
         }
@@ -101,5 +81,4 @@ public class DepositAccount extends Account implements InterestChargeable {
             return new DepositAccount(this);
         }
     }
-
 }

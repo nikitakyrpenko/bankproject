@@ -1,12 +1,6 @@
-package domain;
+package entity;
 
-import domain.Operation;
-import domain.Account;
-import domain.CreditAccount;
-import domain.DepositAccount;
-import domain.exception.MonetaryException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,19 +9,18 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class AccountsOperationProcessingTest {
+public class AccountsOperationEntityProcessingTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    public Account sender;
-    public Account receiver;
-    public Operation operation;
+    public AccountEntity sender;
+    public AccountEntity receiver;
+    public OperationEntity operationEntity;
 
     @Parameterized.Parameter(0)
     public Double transfer;
@@ -57,24 +50,24 @@ public class AccountsOperationProcessingTest {
 
     @Before
     public void init(){
-        sender = new DepositAccount.DepositAccountBuilder()
+        sender = new DepositAccountEntity.DepositAccountBuilder()
                 .withDepositAmount(senderAccountBalance)
                 .withDepositRate(0.1)
                 .build();
 
-        receiver = new CreditAccount.CreditAccountBuilder()
+        receiver = new CreditAccountEntity.CreditAccountBuilder()
                 .withCreditLimit(receiverAccountBalance)
                 .withCreditRate(0.1)
                 .build();
 
-        operation = Operation.builder()
+        operationEntity = OperationEntity.builder()
                 .withTransfer(transfer)
                 .withSender(sender)
                 .withReceiver(receiver)
                 .build();
 
-        sender.processTransfer(operation);
-        receiver.processTransfer(operation);
+       /* sender.processTransfer(operationEntity);
+        receiver.processTransfer(operationEntity);*/
     }
 
     @Test

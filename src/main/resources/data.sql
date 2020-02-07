@@ -35,7 +35,7 @@ VALUES
 ("Mollie","Macias","mauris.Morbi.non@arcu.org","1-856-583-3206","1","1");
 
 
-INSERT INTO operations (purpose,operation_date,transfer) VALUES
+INSERT INTO operationEntities (purpose,operation_date,transfer) VALUES
  ("Aliquam erat volutpat.","2020-08-16 13:57:11",65305),
  ("ipsum leo","2020-11-22 16:19:32",19866),
  ("at, nisi.","2019-06-19 01:05:53",70987),
@@ -100,6 +100,6 @@ INSERT INTO bank_database.accounts_operations (fk_accounts_sender, fk_accounts_r
 
 
 INSERT INTO charges
-(charge,fk_charge_types_charge,fk_account_charge)
+(chargeEntity,fk_charge_types_charge,fk_account_charge)
 VALUES
 (581,2,10),(967,1,1),(521,1,5),(660,1,1),(570,1,3),(933,1,4),(563,1,6),(303,2,8),(726,2,7),(444,2,9);

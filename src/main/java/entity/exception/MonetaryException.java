@@ -1,4 +1,4 @@
-package domain.exception;
+package entity.exception;
 
 public class MonetaryException extends RuntimeException {
 

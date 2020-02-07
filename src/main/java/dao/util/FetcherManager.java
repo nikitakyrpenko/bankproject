@@ -1,9 +1,9 @@
 package dao.util;
 
-import domain.*;
-import domain.enums.AccountType;
-import domain.enums.ChargeType;
-import domain.enums.Role;
+import entity.*;
+import entity.enums.AccountType;
+import entity.enums.ChargeType;
+import entity.enums.Role;
 import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
@@ -22,11 +22,11 @@ public class FetcherManager {
         return INSTANCE;
     }
 
-    public Optional<User> fetchUser(ResultSet resultSet, String[] columnLabels) {
-        User userToReturn = null;
+    public Optional<UserEntity> fetchUser(ResultSet resultSet, String[] columnLabels) {
+        UserEntity userEntityToReturn = null;
         try {
             Role role = resultSet.getInt(columnLabels[0]) == 1 ? Role.CLIENT : Role.ADMIN;
-            userToReturn = User.builder()
+            userEntityToReturn = UserEntity.builder()
                     .withId(resultSet.getInt(columnLabels[1]))
                     .withEmail(resultSet.getString(columnLabels[2]))
                     .withName(resultSet.getString(columnLabels[3]))
@@ -38,18 +38,18 @@ public class FetcherManager {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
-        return Optional.ofNullable(userToReturn);
+        return Optional.ofNullable(userEntityToReturn);
     }
 
 
 
-    public Optional<Account> fetchAccount(ResultSet resultSet, String[] columnLabels) {
-        Account accountToReturn = null;
+    public Optional<AccountEntity> fetchAccount(ResultSet resultSet, String[] columnLabels) {
+        AccountEntity accountEntityToReturn = null;
         try {
             AccountType accountType = resultSet.getInt(columnLabels[0]) == 1 ? AccountType.DEPOSIT : AccountType.CREDIT;
             System.out.println(accountType);
             if (accountType == AccountType.DEPOSIT) {
-                accountToReturn = new DepositAccount.DepositAccountBuilder()
+                accountEntityToReturn = new DepositAccountEntity.DepositAccountBuilder()
                         .withId(resultSet.getInt(columnLabels[1]))
                         .withDate(resultSet.getDate(columnLabels[2]))
                         .withDepositAmount(resultSet.getDouble(columnLabels[3]))
@@ -57,7 +57,7 @@ public class FetcherManager {
                         .withAccountType(accountType)
                         .build();
             } else {
-                accountToReturn = new CreditAccount.CreditAccountBuilder()
+                accountEntityToReturn = new CreditAccountEntity.CreditAccountBuilder()
                         .withId(resultSet.getInt(columnLabels[1]))
                         .withDate(resultSet.getDate(columnLabels[2]))
                         .withBalance(resultSet.getDouble(columnLabels[3]))
@@ -70,13 +70,13 @@ public class FetcherManager {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
-        return Optional.ofNullable(accountToReturn);
+        return Optional.ofNullable(accountEntityToReturn);
     }
 
-    public Optional<Operation> fetchOperation(ResultSet resultSet,String[] columnLabels) {
-        Operation operation = null;
+    public Optional<OperationEntity> fetchOperation(ResultSet resultSet, String[] columnLabels) {
+        OperationEntity operationEntity = null;
         try {
-            operation= Operation.builder()
+            operationEntity = OperationEntity.builder()
                     .withId(resultSet.getInt(columnLabels[0]))
                     .withPurpose(resultSet.getString(columnLabels[1]))
                     .withTransfer(resultSet.getDouble(columnLabels[2]))
@@ -85,19 +85,19 @@ public class FetcherManager {
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
-        return Optional.ofNullable(operation);
+        return Optional.ofNullable(operationEntity);
     }
 
-    public Optional<Charge> fetchCharge(ResultSet resultSet, String[] columnLabels) {
-        Charge chargeToReturn = null;
+    public Optional<ChargeEntity> fetchCharge(ResultSet resultSet, String[] columnLabels) {
+        ChargeEntity chargeEntityToReturn = null;
         try {
             Integer id = resultSet.getInt(columnLabels[0]);
             Double charge = resultSet.getDouble(columnLabels[1]);
             ChargeType chargeType = resultSet.getInt(columnLabels[2]) == 1 ? ChargeType.DEPOSIT_ARRIVAL : ChargeType.CREDIT_ARRIVAL;
-            chargeToReturn = new Charge(id, charge, chargeType);
+            chargeEntityToReturn = new ChargeEntity(id, charge, chargeType);
         } catch (SQLException e) {
             LOGGER.error(e.getMessage());
         }
-        return Optional.ofNullable(chargeToReturn);
+        return Optional.ofNullable(chargeEntityToReturn);
     }
 }

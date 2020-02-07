@@ -1,12 +1,12 @@
 package dao;
 
-import domain.User;
+import entity.UserEntity;
 
 import java.util.Optional;
 
-public interface UserDao extends CrudPageableDao<User> {
+public interface UserDao extends CrudPageableDao<UserEntity> {
 
-    Optional<User> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
-    Optional<User> findUserByAccountId(Integer id);
+    Optional<UserEntity> findUserByAccountId(Integer id);
 }

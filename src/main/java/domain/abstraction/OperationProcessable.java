@@ -1,8 +1,8 @@
 package domain.abstraction;
 
-import domain.Operation;
+import entity.OperationEntity;
 
 public interface OperationProcessable {
 
-    void processTransfer(Operation operation);
+    void processTransfer(OperationEntity operationEntity);
 }

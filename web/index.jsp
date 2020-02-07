@@ -41,23 +41,18 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="#">Home</a>
-        <a class="nav-item nav-link" href="#">Features</a>
-        <a class="nav-item nav-link" href="#">Pricing</a>
+
         <form>
         <select id="lang">
-          <option value="ua">UA</option>
-          <option value="eng">ENG</option>
+          <option value="eng" ${sessionScope.lang == "eng"? "selected" : "" }>ENG</option>
+          <option value="ukr ${sessionScope.lang == "ukr" ? "seleced" : ""}">UA</option>
           <script>
-            //TODO
-            $('#lang').on('change', function() {
-              $.get("/bank_project_war/UserController", {"command" : "language", lang : this.value });
+            let lang = $('#lang');
+            lang.on('change', function() {
+              window.location.href = `/bank_project_war/UserController?command=language&lang=`+lang.val();
             });
 
           </script>
-
-
-          <input type='submit' name='submit'/>
         </select>
         </form>
       </div>

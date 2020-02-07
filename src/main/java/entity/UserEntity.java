@@ -1,7 +1,8 @@
 package entity;
 
+import entity.enums.Role;
+import java.util.Objects;
 
-import domain.enums.Role;
 public class UserEntity {
 
     private final Integer id;
@@ -56,7 +57,38 @@ public class UserEntity {
 
     public static Builder builder(){ return new Builder();}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity userEntity = (UserEntity) o;
+        return Objects.equals(id, userEntity.id) &&
+                Objects.equals(name, userEntity.name) &&
+                Objects.equals(surname, userEntity.surname) &&
+                Objects.equals(email, userEntity.email) &&
+                Objects.equals(password, userEntity.password) &&
+                Objects.equals(telephone, userEntity.telephone) &&
+                role == userEntity.role ;
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", role=" + role +
+                '}'+"\n";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, password, telephone, role);
+    }
 
     public static class Builder{
         private Integer id;
@@ -100,5 +132,4 @@ public class UserEntity {
             return new UserEntity(this);
         }
     }
-
 }

@@ -6,8 +6,8 @@ import dao.util.ConnectorDB;
 import dao.util.FetcherManager;
 import dao.util.QueryManager;
 import dao.util.enums.UserQuery;
-import domain.User;
-import domain.enums.Role;
+import entity.UserEntity;
+import entity.enums.Role;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -16,11 +16,11 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 
-public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao {
+public class UserCrudDaoImpl extends AbstractCrudDaoImp<UserEntity> implements UserDao {
    private static Logger LOGGER = Logger.getLogger(UserCrudDaoImpl.class);
 
     private static final FetcherManager fetcherManager = FetcherManager.getInstance();
-    private static final Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(User.class).get();
+    private static final Map<Enum, String> userToQuery = QueryManager.getInstance().getQueryMap(UserEntity.class).get();
 
     private static final String FIND_BY_ID_QUERY;
     private static final String FIND_BY_EMAIL_QUERY;
@@ -45,23 +45,23 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
     }
 
     @Override
-    protected User mapResultSetToEntity(ResultSet resultSet) {
+    protected UserEntity mapResultSetToEntity(ResultSet resultSet) {
         return fetcherManager.fetchUser(resultSet, getUserColumnLabels())
                 .orElseThrow(DataBaseSqlRuntimeException::new);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<UserEntity> findByEmail(String email) {
         return findByParam(email, FIND_BY_EMAIL_QUERY, STRING_PARAM_SETTER);
     }
 
     @Override
-    public Optional<User> findUserByAccountId(Integer id) {
+    public Optional<UserEntity> findUserByAccountId(Integer id) {
         return findByParam(id, FIND_USER_BY_ACCOUNT, INT_PARAM_SETTER);
     }
 
     @Override
-    public void save(User entity) {
+    public void save(UserEntity entity) {
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(INSERT_USER_QUERY)) {
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getSurname());
@@ -77,7 +77,7 @@ public class UserCrudDaoImpl extends AbstractCrudDaoImp<User> implements UserDao
     }
 
     @Override
-    public void update(User entity) {
+    public void update(UserEntity entity) {
         try (final PreparedStatement statement = connector.getConnection().prepareStatement(UPDATE_USER_QUERY)) {
             statement.setString(1, entity.getName());
             statement.setString(2, entity.getSurname());

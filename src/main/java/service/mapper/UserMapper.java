@@ -6,6 +6,7 @@ import service.encryptor.Encryptor;
 
 public class UserMapper {
 
+    //TODO ENCTYPTOR SHOULD NOT BE IN MAPPER
     private final Encryptor encryptor;
 
     public UserMapper(Encryptor encryptor){
@@ -13,27 +14,27 @@ public class UserMapper {
     }
 
 
-    public UserEntity mapUserToUserEntity(User user){
-        return UserEntity.builder()
-                .withId(user.getId())
-                .withName(user.getName())
-                .withSurname(user.getSurname())
-                .withEmail(user.getEmail())
-                .withPassword(user.getPassword())
-                .withTelephone(user.getTelephone())
-                .withRole(user.getRole())
-                .build();
-    }
-
-    public User mapUserEntityToUser(UserEntity userEntity){
+    public User mapUserToUserEntity(UserEntity userEntity){
         return User.builder()
                 .withId(userEntity.getId())
                 .withName(userEntity.getName())
                 .withSurname(userEntity.getSurname())
                 .withEmail(userEntity.getEmail())
-                .withPassword(encryptor.hash(userEntity.getPassword().toCharArray()))
+                .withPassword(userEntity.getPassword())
                 .withTelephone(userEntity.getTelephone())
                 .withRole(userEntity.getRole())
+                .build();
+    }
+
+    public UserEntity mapUserEntityToUser(User user){
+        return UserEntity.builder()
+                .withId(user.getId())
+                .withName(user.getName())
+                .withSurname(user.getSurname())
+                .withEmail(user.getEmail())
+                .withPassword(encryptor.hash(user.getPassword().toCharArray()))
+                .withTelephone(user.getTelephone())
+                .withRole(user.getRole())
                 .build();
     }
 

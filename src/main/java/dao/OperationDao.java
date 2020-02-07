@@ -1,11 +1,13 @@
 package dao;
 
-import domain.Operation;
+import entity.OperationEntity;
 
 import java.util.List;
 
-public interface OperationDao extends CrudPageableDao<Operation> {
+public interface OperationDao extends CrudPageableDao<OperationEntity> {
 
-    List<Operation> findAllOperationByAccount(Integer id);
+
+    //TODO FINDALLBYACCOUNTPAGEABLE
+    List<OperationEntity> findAllOperationByAccount(Integer id);
 
 }

@@ -3,8 +3,8 @@ package dao;
 
 import dao.impl.UserCrudDaoImpl;
 import dao.util.ConnectorDB;
-import domain.User;
-import domain.enums.Role;
+import entity.UserEntity;
+import entity.enums.Role;
 
 import org.junit.*;
 import org.junit.rules.ExpectedException;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 
-public class UserDaoTest {
+public class UserEntityDaoTest {
     private static ConnectorDB connection;
     private static UserCrudDaoImpl userCrudDao;
 
@@ -43,7 +43,7 @@ public class UserDaoTest {
     @Test
     public void userCrudDaoFindByIdShouldReturnCorrectRecordIfRecordWithIdExistInTable(){
         Optional actual = userCrudDao.findById(1);
-        User expected   = User.builder()
+        UserEntity expected   = UserEntity.builder()
                 .withId(1)
                 .withName("Freya")
                 .withSurname("Rodriguez")
@@ -59,13 +59,13 @@ public class UserDaoTest {
     public void userCrudDaoFindByIdShouldThrowNoSuchElementExceptionIfUserWithSuchIdIsAbsent(){
         expectedException.expect(NoSuchElementException.class);
         expectedException.expectMessage("No value present");
-        Optional<User> byId = userCrudDao.findById(101);
+        Optional<UserEntity> byId = userCrudDao.findById(101);
         byId.get();
     }
 
     @Test
     public void userCrudDaoFindByEmailShouldReturnCorrectRecordIfRecordWithSuchEmailPresent(){
-        User expected = User.builder()
+        UserEntity expected = UserEntity.builder()
                 .withId(11)
                 .withName("Mykyta")
                 .withSurname("Kyrpenko")
@@ -74,7 +74,7 @@ public class UserDaoTest {
                 .withTelephone("380508321899")
                 .withRole(Role.CLIENT)
                 .build();
-        Optional<User> actual = userCrudDao.findByEmail("nikitakyrpenko@gmail.com");
+        Optional<UserEntity> actual = userCrudDao.findByEmail("nikitakyrpenko@gmail.com");
         assertEquals(expected, actual.get());
     }
 
@@ -87,7 +87,7 @@ public class UserDaoTest {
 
     @Test
     public void userCrudDaoFindByAccountIdShouldReturnCorrectUserByAccountId(){
-        User expected = User.builder()
+        UserEntity expected = UserEntity.builder()
                 .withId(3)
                 .withName("Kim")
                 .withSurname("Butler")
@@ -96,7 +96,7 @@ public class UserDaoTest {
                 .withTelephone("1")
                 .withRole(Role.CLIENT)
                 .build();
-        Optional<User> user = userCrudDao.findUserByAccountId(3);
+        Optional<UserEntity> user = userCrudDao.findUserByAccountId(3);
         assertEquals(expected, user.get());
     }
 

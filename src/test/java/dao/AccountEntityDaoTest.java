@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
-public class AccountDaoTest {
+public class AccountEntityDaoTest {
 
     private static ConnectorDB connection;
     private static AccountCrudDaoImpl accountCrudDao;

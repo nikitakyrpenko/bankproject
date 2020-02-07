@@ -1,4 +1,4 @@
-package domain.enums;
+package entity.enums;
 
 public enum  ChargeType {
     DEPOSIT_ARRIVAL, CREDIT_ARRIVAL
